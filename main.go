@@ -53,7 +53,7 @@ func getPages() []Page {
         Timeout: time.Second * 2, // Maximum of 2 secs
     }
 
-    res, err := http.NewRequest(http.MethodGet, url, nil)
+    req, err := http.NewRequest(http.MethodGet, url, nil)
     if err != nil {
         log.Print(err)
         os.Exit(1)
