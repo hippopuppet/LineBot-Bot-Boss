@@ -65,13 +65,14 @@ func getPages() []Page {
     if getErr != nil {
         log.Fatal(getErr)
     }
+
 	body, readErr := ioutil.ReadAll(res.Body)
     if readErr != nil {
         log.Fatal(readErr)
     }
 
-
-    var c []Page
+	
+    c := Page{}
     jsonErr := json.Unmarshal(body, &c)
 	if jsonErr != nil {
         log.Fatal(jsonErr)
