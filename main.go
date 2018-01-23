@@ -110,12 +110,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							pages := getPages()
 							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
-								ResurrectionH, err := strconv.ParseInt(str, 64)/100
+								ResurrectionH, err := strconv.ParseInt(p.Resurrection, 64)
+								ResurrectionH := ResurrectionH/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
-								ResurrectionM, err := strconv.ParseInt(str, 64) - (ResurrectionH*100)
+
+								ResurrectionM, err := strconv.ParseInt(p.Resurrection, 64) - (ResurrectionH*100)
+								ResurrectionM := ResurrectionM - (ResurrectionH*100)
 								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
+
 								ResurrectionA := ResurrectionH*60+ResurrectionM
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
+
 								if NOWTIME >= ResurrectionA {
 									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS-"+p.KingOfName )).Do(); err != nil {
 									log.Print(err)
