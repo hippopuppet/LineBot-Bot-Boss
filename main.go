@@ -78,6 +78,7 @@ func main() {
 				log.Print(err)
 			}
 		}
+		checkBossTimer.Reset(time.Second*10)
 	}()
 
 	http.HandleFunc("/callback", callbackHandler)
