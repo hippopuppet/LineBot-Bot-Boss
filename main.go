@@ -63,7 +63,7 @@ var userID string
 var groupID string
 
 func main() {
-	checkBossTimer := time.NewTimer(time.Minute*1)
+	checkBossTimer := time.NewTimer(time.Second*10)
 	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
@@ -71,6 +71,7 @@ func main() {
 
 	go func() {
 		<-checkBossTimer.C
+		log.Println("checkBossTimer expired")
 		pages := getPages()
 		for _, p := range pages {
 			if _, err := bot.PushMessage(userID, linebot.NewTextMessage("JASON-"+p.toString())).Do(); err != nil {
