@@ -57,8 +57,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeJoin {
-			userID := event.Source.UserID
-			groupID := event.Source.GroupID
+			userID := source.userId
+			groupID := source.groupId
 			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UserID:"+userID+" GroupID"+groupID)).Do(); err != nil {
 					log.Print(err)
 			}
