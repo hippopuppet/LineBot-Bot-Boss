@@ -30,9 +30,11 @@ func main() {
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
-	if event.Type == linebot.EventTypeJoin {
-		userID := event.Source.UserID
-		groupID := event.Source.GroupID
+	for _, event := range events {
+		if event.Type == linebot.EventTypeJoin {
+			userID := event.Source.UserID
+			groupID := event.Source.GroupID
+		}
 	}
 
 	http.HandleFunc("/callback", callbackHandler)
