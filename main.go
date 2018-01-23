@@ -52,7 +52,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		
 		if event.Type == linebot.EventTypeMessage {
 			var local *time.Location
-			local, ok := time.LoadLocation("Asia/Shanghai")
+			local, ok := time.LoadLocation("Asia/Taipei")
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
