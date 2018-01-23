@@ -86,10 +86,9 @@ var bot *linebot.Client
 var userID string
 var groupID string
 var doneChan = make(chan bool)
+var checkBossTimer = time.NewTicker(time.Second*10).C
 
-func main() {
-	checkBossTimer := time.NewTicker(time.Second*10).C
-	
+func main() {	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
@@ -107,7 +106,7 @@ func main() {
 			}
         case <- doneChan:
             log.Println("Done")
-            return
+            checkBossTimer.STOP();
 			}
 		}
 	}()
@@ -137,11 +136,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
+				if message.Text == "DONE" {
+					doneChan <- true
+				}
+				if message.Text == "STOP" {
+					checkBossTimer.Stop()
+				}
+				if message.Text == "START" {
+					checkBossTimer = time.NewTicker(time.Second*10).C
+				}
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 					log.Print(err)
 				}
 			
-				doneChan <- true
+				
 			}
 			
 		}
