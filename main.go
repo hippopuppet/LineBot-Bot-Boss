@@ -110,19 +110,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							pages := getPages()
 							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
-								str := p.Resurrection
-
-								ResurrectionH := strconv.ParseInt(str, 10, 64)/100
-								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
-								ResurrectionM := strconv.ParseInt(str, 10, 64) - (ResurrectionH*100)
-								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
-								ResurrectionA := ResurrectionH*60+ResurrectionM
-								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
-								if NOWTIME >= ResurrectionA {
-									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS-"+p.KingOfName )).Do(); err != nil {
-									log.Print(err)
-									}
-								}
+								
 								
 							}
 						case <- doneChan:
