@@ -45,39 +45,22 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() string {
+func getPages() []Page {
 
-    url := "https://github.com/hippopuppet/LineBot-Bot-Boss/blob/master/BossRefreshInfo.json"
-
-	spaceClient := http.Client{
-        Timeout: time.Second * 2, // Maximum of 2 secs
-    }
-
-    req, err := http.NewRequest(http.MethodGet, url, nil)
+     raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
-        log.Print(err)
+        fmt.Println(err.Error())
         os.Exit(1)
     }
 
-	req.Header.Set("User-Agent", "spacecount-tutorial")
 
-	res, getErr := spaceClient.Do(req)
-    if getErr != nil {
-        log.Fatal(getErr)
-    }
-	body, readErr := ioutil.ReadAll(res.Body)
-    if readErr != nil {
-        log.Fatal(readErr)
-    }
-
-
-    var c Page
+    var c []Page
     jsonErr := json.Unmarshal(body, &c)
 	if jsonErr != nil {
         log.Fatal(jsonErr)
     }
 
-    return c.Title
+    return c
 }
 
 var bot *linebot.Client
@@ -114,11 +97,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				pages := getPages()
-				
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+pages )).Do(); err != nil {
+				for _, p := range pages {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
 						log.Print(err)
 					}
-				
+				}
 
 
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
