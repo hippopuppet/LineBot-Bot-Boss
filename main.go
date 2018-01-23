@@ -45,7 +45,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() []Page {
+func getPages() string {
 
     url := "https://github.com/hippopuppet/LineBot-Bot-Boss/blob/master/BossRefreshInfo.json"
 
@@ -71,13 +71,13 @@ func getPages() []Page {
     }
 
 
-    var c []Page
+    var c Page
     jsonErr := json.Unmarshal(body, &c)
 	if jsonErr != nil {
         log.Fatal(jsonErr)
     }
 
-    return c
+    return c.Title
 }
 
 var bot *linebot.Client
@@ -114,11 +114,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				pages := getPages()
-				for _, p := range pages {
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
+				
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+pages )).Do(); err != nil {
 						log.Print(err)
 					}
-				}
+				
 
 
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
