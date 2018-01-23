@@ -86,9 +86,11 @@ var bot *linebot.Client
 var userID string
 var groupID string
 var doneChan = make(chan bool)
-var checkBossTimer = time.NewTicker(time.Second*10)
+var checkBossTimer time.Ticker
 
-func main() {	
+func main() {
+	checkBossTimer := time.NewTicker(time.Second*10).C
+	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
@@ -96,7 +98,7 @@ func main() {
 	go func() {
 		for {
         select {
-        case checkBossTimer.C:
+        case <- checkBossTimer:
             log.Println("checkBossTimer expired")
 			pages := getPages()
 			for _, p := range pages {
@@ -136,14 +138,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if message.Text == "DONE" {
-					doneChan <- true
-				}
 				if message.Text == "STOP" {
-					checkBossTimer.Stop()
-				}
-				if message.Text == "START" {
-					checkBossTimer = time.NewTicker(time.Second*10).C
+					doneChan <- true
 				}
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 					log.Print(err)
