@@ -25,10 +25,10 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 type Page struct {
-    KingOfName  string `json:"KingOfName"`
-	RefreshTick int `json:"RefreshTick"`
-	Die int `json:"Die"`
-    Resurrection int `json:"Resurrection"`
+    KingOfName  string `json:"kingofname"`
+	RefreshTick int `json:"refreshtick"`
+	Die int `json:"die"`
+    Resurrection int `json:"resurrection"`
 }
 
 func (p Page) toString() string {

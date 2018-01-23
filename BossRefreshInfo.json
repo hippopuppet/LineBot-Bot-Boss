@@ -1,26 +1,26 @@
 [
     {
-      "KingOfName": "¹«",
-      "RefreshTick": "60",
-      "Die": "2010",
-      "Resurrection": "2337"
+      "kingofname": "¹«",
+      "refreshtick": "60",
+      "die": "2010",
+      "resurrection": "2337"
     },
     {
-      "KingOfName": "¤û",
-      "RefreshTick": "120",
-      "Die": "2010",
-      "Resurrection": "2130"
+      "kingofname": "¤û",
+      "refreshtick": "120",
+      "die": "2010",
+      "resurrection": "2130"
     },
     {
-      "KingOfName": "ªê",
-      "RefreshTick": "180",
-      "Die": "2010",
-      "Resurrection": "2190"
+      "kingofname": "ªê",
+      "refreshtick": "180",
+      "die": "2010",
+      "resurrection": "2190"
     },
     {
-      "KingOfName": "¨ß",
-      "RefreshTick": "240",
-      "Die": "2010",
-      "Resurrection": "2250"
+      "kingofname": "¨ß",
+      "refreshtick": "240",
+      "die": "2010",
+      "resurrection": "2250"
     }
 ]
