@@ -108,11 +108,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 							pages := getPages()
-							for _, p := range pages {
-								log.Println("p.Resurrection-"+strconv.Itoa(p.Resurrection))
-								ResurrectionH := p.Resurrection/100
+							for index, p := range pages {
+								log.Println("p.Resurrection-"+strconv.Itoa(p.Resurrection[index]))
+								ResurrectionH := p.Resurrection[index]/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
-								ResurrectionM := p.Resurrection - (ResurrectionH*100)
+								ResurrectionM := p.Resurrection[index] - (ResurrectionH*100)
 								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
 								ResurrectionA := ResurrectionH*60+ResurrectionM
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
