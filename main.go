@@ -19,9 +19,43 @@ import (
 	"os"
 	"time"
 	"strconv"
+	"encoding/json"
+	"io/ioutil"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
+
+type Page struct {
+    ID    int    `json:"id"`
+    Title string `json:"title"`
+    Url   string `json:"url"`
+}
+
+func (p Page) toString() string {
+    return toJson(p)
+}
+
+func toJson(p interface{}) string {
+    bytes, err := json.Marshal(p)
+    if err != nil {
+        fmt.Println(err.Error())
+        os.Exit(1)
+    }
+
+    return string(bytes)
+}
+
+func getPages() []Page {
+    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
+    if err != nil {
+        fmt.Println(err.Error())
+        os.Exit(1)
+    }
+
+    var c []Page
+    json.Unmarshal(raw, &c)
+    return c
+}
 
 var bot *linebot.Client
 var userID string
@@ -57,6 +91,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
+					log.Print(err)
+				}
+			}
+			pages := getPages()
+			for _, p := range pages {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(p.toString() )).Do(); err != nil {
 					log.Print(err)
 				}
 			}
