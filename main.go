@@ -26,9 +26,9 @@ import (
 )
 type Page struct {
     KingOfName  string `json:"kingofname"`
-	RefreshTick string `json:"refreshtick"`
-	Die string `json:"die"`
-    Resurrection string `json:"resurrection"`
+	RefreshTick int `json:"refreshtick"`
+	Die int `json:"die"`
+    Resurrection int `json:"resurrection"`
 }
 
 func (p Page) toString() string {
@@ -108,16 +108,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 							pages := getPages()
-							for _, p := range pages {
-								log.Println("p.Resurrection-"+p.Resurrection)
-								ResurrectionH := strconv.Atoi(p.Resurrection)/100
+							for index, p := range pages {
+								log.Println("p.Resurrection-"+strconv.Itoa(p[index].Resurrection))
+								ResurrectionH := p[index].Resurrection/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
-								ResurrectionM := strconv.Atoi(p.Resurrection) - (ResurrectionH*100)
+								ResurrectionM := p[index].Resurrection - (ResurrectionH*100)
 								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
 								ResurrectionA := ResurrectionH*60+ResurrectionM
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
 								if NOWTIME >= ResurrectionA {
-									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS-"+p.KingOfName )).Do(); err != nil {
+									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS-"+p[index].KingOfName )).Do(); err != nil {
 									log.Print(err)
 									}
 								}
