@@ -113,7 +113,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								ResurrectionA := ResurrectionH*60+ResurrectionM
 
 								if NOWTIME >= ResurrectionA {
-									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("¤ý­n¥X¤F-"+p.KingOfName )).Do(); err != nil {
+									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS-"+p.KingOfName )).Do(); err != nil {
 									log.Print(err)
 									}
 								}
