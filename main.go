@@ -25,6 +25,7 @@ import (
 var bot *linebot.Client
 var userID string
 var groupID string
+var nowTime string
 
 func main() {
 	var err error
