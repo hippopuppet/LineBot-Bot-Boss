@@ -30,6 +30,7 @@ func main() {
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
+	events, err := bot.ParseRequest(r)
 	for _, event := range events {
 		if event.Type == linebot.EventTypeJoin {
 			userID := event.Source.UserID
