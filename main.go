@@ -46,11 +46,17 @@ func toJson(p interface{}) string {
 }
 
 func getPages() []Page {
-    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
+	// json data
+    url := "https://github.com/hippopuppet/LineBot-Bot-Boss/blob/master/BossRefreshInfo.json"
+
+    res, err := http.Get(url)
+
     if err != nil {
         log.Println(err.Error())
         os.Exit(1)
     }
+
+    raw, err := ioutil.ReadAll(res.Body)
 
     var c []Page
     json.Unmarshal(raw, &c)
