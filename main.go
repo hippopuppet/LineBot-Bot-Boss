@@ -138,8 +138,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if message.Text == "STOP" {
+				if message.Text == "DONE" {
 					doneChan <- true
+				}
+				if message.Text == "STOP" {
+					checkBossTimer.Stop()
+				}
+				if message.Text == "START" {
+					checkBossTimer := time.NewTicker(time.Second*10).C
 				}
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 					log.Print(err)
