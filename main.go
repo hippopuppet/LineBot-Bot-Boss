@@ -26,9 +26,9 @@ import (
 )
 type Page struct {
     KingOfName  string `json:"kingofname"`
-	RefreshTick int `json:"refreshtick"`
-	Die int `json:"die"`
-    Resurrection int `json:"resurrection"`
+	RefreshTick string `json:"refreshtick"`
+	Die string `json:"die"`
+    Resurrection string `json:"resurrection"`
 }
 
 func (p Page) toString() string {
@@ -109,9 +109,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 							pages := getPages()
 							for _, p := range pages {
-								ResurrectionH := p.Resurrection/100
+								log.Println("p.Resurrection-"+p.Resurrection)
+								ResurrectionH := strconv.Atoi(p.Resurrection)/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
-								ResurrectionM := p.Resurrection - (ResurrectionH*100)
+								ResurrectionM := strconv.Atoi(p.Resurrection) - (ResurrectionH*100)
 								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
 								ResurrectionA := ResurrectionH*60+ResurrectionM
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
