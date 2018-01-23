@@ -61,7 +61,7 @@ func getPages() []Page {
 var bot *linebot.Client
 var userID string
 var groupID string
-doneChan := make(chan bool)
+var doneChan := make(chan bool)
 
 func main() {
 	checkBossTimer := time.NewTimer(time.Second*10).C
