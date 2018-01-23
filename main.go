@@ -89,8 +89,6 @@ var doneChan = make(chan bool)
 var checkBossTimer = time.NewTicker(time.Second*10)
 
 func main() {	
-	checkBossTimer.C
-
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
@@ -98,7 +96,7 @@ func main() {
 	go func() {
 		for {
         select {
-        case <- checkBossTimer:
+        case <- checkBossTimer.C:
             log.Println("checkBossTimer expired")
 			pages := getPages()
 			for _, p := range pages {
