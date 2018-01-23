@@ -110,11 +110,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							pages := getPages()
 							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
-								ResurrectionH, err := strconv.ParseInt(p.Resurrection, 64)
+								ResurrectionH, err := strconv.ParseInt(p.Resurrection, 10, 64)
 								ResurrectionH := ResurrectionH/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
 
-								ResurrectionM, err := strconv.ParseInt(p.Resurrection, 64) - (ResurrectionH*100)
+								ResurrectionM, err := strconv.ParseInt(p.Resurrection, 10, 64)
 								ResurrectionM := ResurrectionM - (ResurrectionH*100)
 								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
 
