@@ -110,7 +110,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							pages := getPages()
 							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
-								p_Resurrection, err := strconv.ParseInt(p.Resurrection, 10, 64)
+								p_Resurrection, err := strconv.ParseInt(p.Resurrection, 10, 32)
 								ResurrectionH := p_Resurrection/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
 
