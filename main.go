@@ -86,7 +86,7 @@ var bot *linebot.Client
 var userID string
 var groupID string
 var doneChan = make(chan bool)
-var checkBossTimer *time.Ticker
+var checkBossTimer time.Ticker
 
 func main() {	
 	checkBossTimer = time.NewTicker(time.Second*10).C
