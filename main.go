@@ -48,7 +48,7 @@ func toJson(p interface{}) string {
 func getPages() []Page {
     raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
-        fmt.Println(err.Error())
+        log.Println(err.Error())
         os.Exit(1)
     }
 
