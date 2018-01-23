@@ -119,7 +119,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			pages := getPages()
 			for _, p := range pages {
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"p.toString() )).Do(); err != nil {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
 					log.Print(err)
 				}
 			}
