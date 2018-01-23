@@ -38,7 +38,7 @@ func (p Page) toString() string {
 func toJson(p interface{}) string {
     bytes, err := json.Marshal(p)
     if err != nil {
-        fmt.Println(err.Error())
+        log.Print(err)
         os.Exit(1)
     }
 
@@ -52,7 +52,7 @@ func getPages() []Page {
     res, err := http.Get(url)
 
     if err != nil {
-        log.Println(err.Error())
+        log.Print(err)
         os.Exit(1)
     }
 
@@ -102,7 +102,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			pages := getPages()
 			for _, p := range pages {
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(p.toString() )).Do(); err != nil {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
 					log.Print(err)
 				}
 			}
