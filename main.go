@@ -29,15 +29,6 @@ func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
-
-	events, err := bot.ParseRequest(*http.Request)
-	for _, event := range events {
-		if event.Type == linebot.EventTypeJoin {
-			userID := event.Source.UserID
-			groupID := event.Source.GroupID
-		}
-	}
-
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
@@ -46,7 +37,6 @@ func main() {
 
 func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	events, err := bot.ParseRequest(r)
-
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			w.WriteHeader(400)
@@ -64,8 +54,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(err)
 				}
 			}
-			if _, err = bot.PushMessage(groupID, linebot.NewTextMessage("PUSH_TEST")).Do(); err != nil {
-				log.Print(err)
+		}
+
+		if event.Type == linebot.EventTypeJoin {
+			userID := event.Source.UserID
+			groupID := event.Source.GroupID
+			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UserID:"+userID+" GroupID"+groupID)).Do(); err != nil {
+					log.Print(err)
 			}
 		}
 	}
