@@ -65,14 +65,13 @@ func getPages() []Page {
     if getErr != nil {
         log.Fatal(getErr)
     }
-
 	body, readErr := ioutil.ReadAll(res.Body)
     if readErr != nil {
         log.Fatal(readErr)
     }
 
-	
-    c := Page{}
+
+    var c []Page
     jsonErr := json.Unmarshal(body, &c)
 	if jsonErr != nil {
         log.Fatal(jsonErr)
@@ -114,16 +113,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
+				pages := getPages()
+				for _, p := range pages {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
+						log.Print(err)
+					}
+				}
+
+
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 					log.Print(err)
 				}
 			}
-			pages := getPages()
-			for _, p := range pages {
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
-					log.Print(err)
-				}
-			}
+			
 		}
 
 		if event.Type == linebot.EventTypeJoin {
