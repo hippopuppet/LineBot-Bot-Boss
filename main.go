@@ -122,8 +122,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeFollow {
 			userID := event.Source.UserID
 			//groupID := event.Source.GroupID
-			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UserID:"+userID)).Do(); err != nil {
-					log.Print(err)
+			if _, err := bot.PushMessage(userID, linebot.NewTextMessage("UserID:"+userID)).Do(); err != nil {
+				log.Print(err)
 			}
 		}
 	}
