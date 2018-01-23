@@ -51,7 +51,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	for _, event := range events {
 		
 		if event.Type == linebot.EventTypeMessage {
-			hour,min,sec := time.Now().Clock()
+			hour,min,sec := time.Now().UCT().Clock()
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa(hour)+"-"+strconv.Itoa(min)+"-"+strconv.Itoa(sec) )).Do(); err != nil {
