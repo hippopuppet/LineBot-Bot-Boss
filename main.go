@@ -46,20 +46,37 @@ func toJson(p interface{}) string {
 }
 
 func getPages() []Page {
-	// json data
+
     url := "https://github.com/hippopuppet/LineBot-Bot-Boss/blob/master/BossRefreshInfo.json"
 
-    res, err := http.Get(url)
+	spaceClient := http.Client{
+        Timeout: time.Second * 2, // Maximum of 2 secs
+    }
 
+    res, err := http.NewRequest(http.MethodGet, url, nil)
     if err != nil {
         log.Print(err)
         os.Exit(1)
     }
 
-    raw, err := ioutil.ReadAll(res.Body)
+	req.Header.Set("User-Agent", "spacecount-tutorial")
+
+	res, getErr := spaceClient.Do(req)
+    if getErr != nil {
+        log.Fatal(getErr)
+    }
+	body, readErr := ioutil.ReadAll(res.Body)
+    if readErr != nil {
+        log.Fatal(readErr)
+    }
+
 
     var c []Page
-    json.Unmarshal(raw, &c)
+    jsonErr := json.Unmarshal(body, &c)
+	if jsonErr != nil {
+        log.Fatal(jsonErr)
+    }
+
     return c
 }
 
@@ -91,13 +108,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	for _, event := range events {
 		
 		if event.Type == linebot.EventTypeMessage {
-			pages := getPages()
-			for _, p := range pages {
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
-					log.Print(err)
-				}
-			}
-
 			var local *time.Location
 			local, ok := time.LoadLocation("Asia/Taipei")
 			log.Print(ok)
@@ -107,7 +117,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(err)
 				}
 			}
-			
+			pages := getPages()
+			for _, p := range pages {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"p.toString() )).Do(); err != nil {
+					log.Print(err)
+				}
+			}
 		}
 
 		if event.Type == linebot.EventTypeJoin {
