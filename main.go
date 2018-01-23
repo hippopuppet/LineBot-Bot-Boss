@@ -96,7 +96,7 @@ func main() {
 	go func() {
 		for {
         select {
-        case <- checkBossTimer.C:
+        case checkBossTimer.C:
             log.Println("checkBossTimer expired")
 			pages := getPages()
 			for _, p := range pages {
