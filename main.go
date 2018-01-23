@@ -91,6 +91,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	for _, event := range events {
 		
 		if event.Type == linebot.EventTypeMessage {
+			pages := getPages()
+			for _, p := range pages {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
+					log.Print(err)
+				}
+			}
+
 			var local *time.Location
 			local, ok := time.LoadLocation("Asia/Taipei")
 			log.Print(ok)
@@ -100,12 +107,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(err)
 				}
 			}
-			pages := getPages()
-			for _, p := range pages {
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("JASON-"+p.toString() )).Do(); err != nil {
-					log.Print(err)
-				}
-			}
+			
 		}
 
 		if event.Type == linebot.EventTypeJoin {
