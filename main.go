@@ -22,11 +22,19 @@ import (
 )
 
 var bot *linebot.Client
+var userID string
+var groupID string
 
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
+
+	if event.Type == linebot.EventTypeJoin {
+		userID := event.Source.UserID
+		groupID := event.Source.GroupID
+	}
+
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
@@ -53,7 +61,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(err)
 				}
 			}
-			if _, err = bot.PushMessage(event.Source.UserID, linebot.NewTextMessage("PUSH_TEST")).Do(); err != nil {
+			if _, err = bot.PushMessage(groupID, linebot.NewTextMessage("PUSH_TEST")).Do(); err != nil {
 				log.Print(err)
 			}
 		}
