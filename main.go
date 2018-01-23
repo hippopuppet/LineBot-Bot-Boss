@@ -111,6 +111,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
 								p_Resurrection, err := strconv.Atoi(p.Resurrection)
+								if err != nil {
+									log.Print(err)
+								}
 								ResurrectionH := p_Resurrection/100
 								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
 
