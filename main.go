@@ -61,24 +61,31 @@ func getPages() []Page {
 var bot *linebot.Client
 var userID string
 var groupID string
+doneChan := make(chan bool)
 
 func main() {
-	checkBossTimer := time.NewTimer(time.Second*10)
+	checkBossTimer := time.NewTimer(time.Second*10).C
 	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
 	go func() {
-		<-checkBossTimer.C
-		log.Println("checkBossTimer expired")
-		pages := getPages()
-		for _, p := range pages {
-			if _, err := bot.PushMessage(userID, linebot.NewTextMessage("JASON-"+p.toString())).Do(); err != nil {
-				log.Print(err)
+		for {
+        select {
+        case <- checkBossTimer:
+            log.Println("checkBossTimer expired")
+			pages := getPages()
+			for _, p := range pages {
+				if _, err := bot.PushMessage(userID, linebot.NewTextMessage("JASON-"+p.toString())).Do(); err != nil {
+					log.Print(err)
+				}
+			}
+        case <- doneChan:
+            log.Println("Done")
+            return
 			}
 		}
-		checkBossTimer.Reset(time.Second*10)
 	}()
 
 	http.HandleFunc("/callback", callbackHandler)
@@ -109,6 +116,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 					log.Print(err)
 				}
+			case "DONE":
+				doneChan <- true
 			}
 			
 		}
