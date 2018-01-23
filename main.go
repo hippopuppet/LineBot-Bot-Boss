@@ -51,24 +51,24 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(time.Now().Hour()+":"+time.Now().Minute()+":"+time.Now().Second())).Do(); err != nil {
 					log.Print(err)
 				}
 			}
 		}
 
 		if event.Type == linebot.EventTypeJoin {
-			userID := event.Source.UserID
+			//userID := event.Source.UserID
 			groupID := event.Source.GroupID
-			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UserID:"+userID+" GroupID"+groupID)).Do(); err != nil {
+			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("GroupID"+groupID)).Do(); err != nil {
 					log.Print(err)
 			}
 		}
 
 		if event.Type == linebot.EventTypeFollow {
 			userID := event.Source.UserID
-			groupID := event.Source.GroupID
-			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UserID:"+userID+" GroupID"+groupID)).Do(); err != nil {
+			//groupID := event.Source.GroupID
+			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UserID:"+userID)).Do(); err != nil {
 					log.Print(err)
 			}
 		}
