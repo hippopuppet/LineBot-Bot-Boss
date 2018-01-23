@@ -64,7 +64,7 @@ var groupID string
 var doneChan = make(chan bool)
 
 func main() {
-	checkBossTimer := time.NewTimer(time.Second*10).C
+	checkBossTimer := time.NewTicker(time.Second*10).C
 	
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
