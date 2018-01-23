@@ -106,7 +106,7 @@ func main() {
 			}
         case <- doneChan:
             log.Println("Done")
-            checkBossTimer.STOP();
+            return
 			}
 		}
 	}()
