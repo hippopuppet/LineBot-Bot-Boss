@@ -24,36 +24,11 @@ import (
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
-
-type Time time.Time
-
-const (
-    timeFormart = "2006-01-02 15:04:05"
-)
-
-func (t *Time) UnmarshalJSON(data []byte) (err error) {
-    now, err := time.ParseInLocation(`"`+timeFormart+`"`, string(data), time.Local)
-    *t = Time(now)
-    return
-}
-
-func (t Time) MarshalJSON() ([]byte, error) {
-    b := make([]byte, 0, len(timeFormart)+2)
-    b = append(b, '"')
-    b = time.Time(t).AppendFormat(b, timeFormart)
-    b = append(b, '"')
-    return b, nil
-}
-
-func (t Time) String() string {
-    return time.Time(t).Format(timeFormart)
-}
-
 type Page struct {
     KingOfName  string `json:"KingOfName"`
 	RefreshTick int `json:"RefreshTick"`
-	Die Time `json:"Die"`
-    Resurrection Time `json:"Resurrection"`
+	Die int `json:"Die"`
+    Resurrection int `json:"Resurrection"`
 }
 
 func (p Page) toString() string {
@@ -130,11 +105,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						select {
 						case <- checkBossTimer:
 							log.Println("checkBossTimer expired")
+							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							pages := getPages()
 							for _, p := range pages {
-								if _, err := bot.PushMessage(userID, linebot.NewTextMessage("JASON-"+p.toString())).Do(); err != nil {
+								ResurrectionH := p.Resurrection/100
+								ResurrectionM := p.Resurrection - (ResurrectionH*100)
+								ResurrectionA := ResurrectionH*60+ResurrectionM
+
+								if NOWTIME >= ResurrectionA {
+									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("¤ý­n¥X¤F-"+p.KingOfName )).Do(); err != nil {
 									log.Print(err)
+									}
 								}
+								
 							}
 						case <- doneChan:
 							log.Println("Done")
