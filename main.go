@@ -86,9 +86,11 @@ var bot *linebot.Client
 var userID string
 var groupID string
 var doneChan = make(chan bool)
-var checkBossTimer = time.NewTicker(time.Second*10).C
+var checkBossTimer *Ticker
 
 func main() {	
+	checkBossTimer = time.NewTicker(time.Second*10).C
+
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
