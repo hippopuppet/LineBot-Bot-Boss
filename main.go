@@ -136,14 +136,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				 if string(message.Text[0]) == "@" {
 					result := strings.Split(message.Text," ")
+					log.Println("result[0]-"+result[0])
 					if result[0] == "@BOSS" {
+						log.Println("result[2]-"+result[2])
 						if result[2] == "Die" {
+							log.Println("result[3]-"+result[3])
 							if result[3] != "" {
-								
+								log.Println("load page....")
 								pages := getPages()
 								for _, p := range pages {
 									log.Println("p.KingOfName-"+p.KingOfName)
+									log.Println("compare ...."+ result[1])
 									if result[1] == p.KingOfName {
+										
 										p.Die = result[3]
 										break
 									}
