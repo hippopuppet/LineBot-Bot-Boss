@@ -153,7 +153,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										break
 									}
 								}
-								log.Println(pages.toString())
+								log.Println(pages[0].toString())
+								log.Println(pages[1].toString())
+								log.Println(pages[2].toString())
+								log.Println(pages[3].toString())
 								log.Println("ajson.Marshal ...." )
 								pagesJson, _ := json.Marshal(pages)
 								log.Println("WriteFile ...."+string(pagesJson) )
