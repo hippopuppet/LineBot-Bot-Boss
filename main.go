@@ -80,7 +80,7 @@ func main() {
 
     c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 
-	result := Page{}
+	result = Page{}
     err := c.Find({"refreshtick": "120"}).One(&result)
     if err != nil {
        log.Fatal(err)
