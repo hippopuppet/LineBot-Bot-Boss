@@ -49,7 +49,7 @@ func toJson(p interface{}) string {
 func getPages() []Page {
    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
-        fmt.Println(err.Error())
+        log.Println(err.Error())
         os.Exit(1)
     }
 
@@ -153,18 +153,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										break
 									}
 								}
-								log.Println(pages[0].toString())
-								log.Println(pages[1].toString())
-								log.Println(pages[2].toString())
-								log.Println(pages[3].toString())
-								log.Println("ajson.Marshal ...." )
 								pagesJson, _ := json.Marshal(pages)
-								log.Println("WriteFile ...."+string(pagesJson) )
-								err = ioutil.WriteFile("./BossRefreshInfo.json", pagesJson, 0644)
+								err = ioutil.WriteFile("BossRefreshInfo.json", pagesJson, 0644)
 								if err != nil {
 									log.Println(err)
 								}
-
+								log.Println("WriteFile ...."+string(pagesJson) )
 							}
 						}
 					}
