@@ -69,23 +69,7 @@ var checkBossTimer time.Ticker
 
 func main() {
 	var err error
-	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
-	if err != nil {
-		// TODO: handle error.
-	}
-	wc := client.Bucket("bucketname").Object("filename1").NewWriter(ctx)
-	wc.ContentType = "text/plain"
-	wc.ACL = []storage.ACLRule{{storage.AllUsers, storage.RoleReader}}
-	if _, err := wc.Write([]byte("hello world")); err != nil {
-		// TODO: handle error.
-		// Note that Write may return nil in some error situations,
-		// so always check the error from Close.
-	}
-	if err := wc.Close(); err != nil {
-		// TODO: handle error.
-	}
-	log.Println("updated object:", wc.Attrs())
+	
 
 	
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
