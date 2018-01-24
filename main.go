@@ -95,10 +95,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if message.Text == "DONE" {
 					doneChan <- true
 				}
-				else if message.Text == "STOP" {
+				 if message.Text == "STOP" {
 					checkBossTimer.Stop()
 				}
-				else if message.Text == "START" {
+				 if message.Text == "START" {
 					checkBossTimer := time.NewTicker(time.Second*10).C
 					go func() {
 						for {
@@ -133,14 +133,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}()
 				}
-				else if message.Text[0] == "@" {
+				 if message.Text[0] == "@" {
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
 					}
 				}
-				else {
 				
-				}
 				
 			
 				
