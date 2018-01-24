@@ -138,7 +138,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					result := strings.Split(message.Text," ")
 					if result[0] == "@BOSS" {
 						if result[2] == "Die" {
-							if result[3] != nil {
+							if string(result[3]) != nil {
 								
 								pages := getPages()
 								for _, p := range pages {
