@@ -148,12 +148,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									log.Println("p.KingOfName-"+p.KingOfName)
 									log.Println("compare ...."+ result[1])
 									if result[1] == p.KingOfName {
-										
 										p.Die = result[3]
+										log.Println("assiagn die time ...."+ p.Die)
 										break
 									}
 								}
+								log.Println(pages.toString())
+								log.Println("ajson.Marshal ...."+ )
 								pagesJson, _ := json.Marshal(pages)
+								log.Println("WriteFile ...."+string(pagesJson) )
 								err = ioutil.WriteFile("./BossRefreshInfo.json", pagesJson, 0644)
 								if err != nil {
 									log.Println(err)
