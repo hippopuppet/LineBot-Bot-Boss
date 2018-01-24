@@ -154,7 +154,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									}
 								}
 								log.Println(pages.toString())
-								log.Println("ajson.Marshal ...."+ )
+								log.Println("ajson.Marshal ...." )
 								pagesJson, _ := json.Marshal(pages)
 								log.Println("WriteFile ...."+string(pagesJson) )
 								err = ioutil.WriteFile("./BossRefreshInfo.json", pagesJson, 0644)
