@@ -69,7 +69,7 @@ var checkBossTimer time.Ticker
 func main() {
 	var err error
 	
-	session, err := mgo.Dial("mongodb://<heroku_xzzlp7s1>:<heroku_xzzlp7s1>@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+	session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
     if err != nil {
        panic(err)
     }
