@@ -21,6 +21,7 @@ import (
 	"strconv"
 	"encoding/json"
 	"io/ioutil"
+	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -134,6 +135,29 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}()
 				}
 				 if string(message.Text[0]) == "@" {
+					result := strings.Split(message.Text," ")
+					if result[0] == "@BOSS" {
+						if result[2] == "Die" {
+							if result[3] != nil {
+								
+								pages := getPages()
+								for _, p := range pages {
+									log.Println("p.KingOfName-"+p.KingOfName)
+									if result[1] == p.KingOfName {
+										p.Die = result[3]
+										break
+									}
+								}
+								pagesJson, _ := json.Marshal(pages)
+								err = ioutil.WriteFile("./BossRefreshInfo.json", pagesJson, 0644)
+								if err != nil {
+									log.Println(err)
+								}
+
+							}
+						}
+					}
+					
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
 					}
