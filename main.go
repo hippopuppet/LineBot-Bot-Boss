@@ -24,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
-	"github.com/google/go-github/github"
 )
 type Page struct {
     KingOfName  string `json:"kingofname"`
