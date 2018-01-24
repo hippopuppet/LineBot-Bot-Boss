@@ -1,5 +1,5 @@
 {
-  "name": "LineBotTemplate",
+  "name": "LineBot-Bot-Boss",
   "description": "Line Bot API template",
   "repository": "https://github.com/hippopuppet/LineBot-Bot-Boss",
   "keywords": ["Line", "go", "static"],
