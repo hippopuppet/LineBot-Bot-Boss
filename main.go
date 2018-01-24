@@ -133,7 +133,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}()
 				}
-				 if message.Text[0] == "@" {
+				 if string(message.Text[0]) == "@" {
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
 					}
