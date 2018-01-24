@@ -80,15 +80,13 @@ func main() {
 
     c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 
-	result = Page{}
-    err := c.Find({"refreshtick": "120"}).One(&result)
+	result := Page{}
+    err := c.Find(bson.M{"refreshtick": "120"}).One(&result)
     if err != nil {
        log.Fatal(err)
     }
 	log.Println("KingOfName: "+ result.KingOfName)
     
-    
-	
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
