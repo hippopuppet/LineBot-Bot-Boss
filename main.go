@@ -154,7 +154,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									}
 								}
 								pagesJson, _ := json.Marshal(pages)
-								err = ioutil.WriteFile("C:\\BossRefreshInfo.json", pagesJson, os.O_CREATE ,0644)
+								err = ioutil.WriteFile("C:\\BossRefreshInfo.json", pagesJson, os.O_CREATE)
 								if err != nil {
 									log.Println(err)
 								}
