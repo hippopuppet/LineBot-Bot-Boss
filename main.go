@@ -25,7 +25,7 @@ import (
 
 	"github.com/line/line-bot-sdk-go/linebot"
 
-	"google.golang.org/api/storage/v1"
+	"google.golang.org/api/urlshortener/v1"
 	"google.golang.org/appengine"
     "google.golang.org/appengine/file"
 )
