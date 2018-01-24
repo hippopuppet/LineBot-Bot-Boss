@@ -24,7 +24,8 @@ import (
 	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
-	"cloud.google.com/go/storage"
+
+	"google.golang.org/api/storage/v1"
 	"google.golang.org/appengine"
     "google.golang.org/appengine/file"
 )
