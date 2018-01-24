@@ -26,6 +26,7 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 
 	"cloud.google.com/go/storage"
+	"golang.org/x/net/context"
 )
 type Page struct {
     KingOfName  string `json:"kingofname"`
