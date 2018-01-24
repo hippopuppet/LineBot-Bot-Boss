@@ -144,12 +144,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							if result[3] != "" {
 								log.Println("load page....")
 								pages := getPages()
-								for _, p := range pages {
-									log.Println("p.KingOfName-"+p.KingOfName)
+								for i, _ := range pages {
+									log.Println("p.KingOfName-"+pages[i].KingOfName)
 									log.Println("compare ...."+ result[1])
-									if result[1] == p.KingOfName {
-										p.Die = result[3]
-										log.Println("assiagn die time ...."+ p.Die)
+									if result[1] == pages[i].KingOfName {
+										pages[i].Die = result[3]
+										log.Println("assiagn die time ...."+ pages[i].Die)
 										break
 									}
 								}
