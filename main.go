@@ -69,7 +69,24 @@ var checkBossTimer time.Ticker
 func main() {
 	var err error
 	
+	session, err := mgo.Dial("ds111598.mlab.com")
+    if err != nil {
+       panic(err)
+    }
+    defer session.Close()
 
+    // Optional. Switch the session to a monotonic behavior.
+    session.SetMode(mgo.Monotonic, true)
+
+    c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+	result := Page{}
+    err := c.Find({refreshtick: "120"}).One(&result)
+    if err != nil {
+       log.Fatal(err)
+    }
+	log.Println("KingOfName: "+ result.KingOfName)
+    
+    
 	
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
