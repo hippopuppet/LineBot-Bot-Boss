@@ -26,7 +26,6 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 
 	"google.golang.org/api/storage/v1"
-	oldAppengine "appengine"
 	"google.golang.org/appengine"
     "google.golang.org/appengine/file"
 )
