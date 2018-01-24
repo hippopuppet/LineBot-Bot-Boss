@@ -79,7 +79,7 @@ func main() {
     session.SetMode(mgo.Monotonic, true)
 
     c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-
+	log.Println("Will to find")
 	result := Page{}
     err = c.Find(bson.M{"refreshtick": "120"}).One(&result)
     if err != nil {
