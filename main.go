@@ -68,7 +68,7 @@ var doneChan = make(chan bool)
 var checkBossTimer time.Ticker
 
 func main() {
-
+	var err error
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -87,7 +87,7 @@ func main() {
 	}
 	log.Println("updated object:", wc.Attrs())
 
-	var err error
+	
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
