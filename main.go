@@ -95,10 +95,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if message.Text == "DONE" {
 					doneChan <- true
 				}
-				if message.Text == "STOP" {
+				else if message.Text == "STOP" {
 					checkBossTimer.Stop()
 				}
-				if message.Text == "START" {
+				else if message.Text == "START" {
 					checkBossTimer := time.NewTicker(time.Second*10).C
 					go func() {
 						for {
@@ -115,17 +115,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									log.Print(err)
 								}
 								ResurrectionH := p_Resurrection/100
-								log.Println("ResurrectionH-"+strconv.Itoa(ResurrectionH))
-
 								ResurrectionM := p_Resurrection - (ResurrectionH*100)
-								log.Println("ResurrectionM-"+strconv.Itoa(ResurrectionM))
-
 								ResurrectionA := ResurrectionH*60+ResurrectionM
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
 
-								if NOWTIME >= ResurrectionA {
-									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS-"+p.KingOfName )).Do(); err != nil {
-									log.Print(err)
+								if NOWTIME - ResurrectionA <=  10 {
+									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE-"+p.KingOfName )).Do(); err != nil {
+										log.Print(err)
 									}
 								}
 								
@@ -137,9 +133,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}()
 				}
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
-					log.Print(err)
+				else if message.Text[0] == "@" {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
+						log.Print(err)
+					}
 				}
+				
 			
 				
 			}
