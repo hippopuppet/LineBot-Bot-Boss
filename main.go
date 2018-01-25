@@ -25,7 +25,6 @@ import (
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 type JSONDATA struct {
@@ -185,15 +184,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult bson.M
+					var dbResult JSONDATA
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
 					}
 					log.Println("result: ...")
 					log.Println(dbResult)
-
-
 
 				
 
