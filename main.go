@@ -234,7 +234,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
 										// Update
-										updateData := BOSSINFO{"die": dbResult[0].BossInfo[i].Die,"resurrection": dbResult[0].BossInfo[i].Resurrection}
+										updateData := BOSSINFO{ Die: dbResult[0].BossInfo[i].Die, Resurrection: dbResult[0].BossInfo[i].Resurrection }
 										colQuerier := bson.M{"kingofname": dbResult[0].BossInfo[i].KingOfName} 
 										log.Print("kingofname: ")
 										log.Println(colQuerier)
