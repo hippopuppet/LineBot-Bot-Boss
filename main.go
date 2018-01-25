@@ -145,6 +145,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							if result[3] != "" {
 								log.Println("load page....")
 								pages := getPages()
+								log.Println(pages)
 								for i, _ := range pages {
 									log.Println("p.KingOfName-"+pages[i].KingOfName)
 									log.Println("compare ...."+ result[1])
