@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
+	"math"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"gopkg.in/mgo.v2"
