@@ -175,6 +175,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("result: ...")
 								log.Println(dbResult)
 
+								log.Println("result[0]: ...")
+								log.Println(dbResult[0])
+
+								log.Println("result[0].KingOfName: ...")
+								log.Println(dbResult[0].KingOfName)
+
 								JsonData, err := json.Marshal(dbResult)
 								if err != nil {
 									log.Print(err)
@@ -182,8 +188,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("Marshal result: ...")
 								log.Println(string(JsonData))
 
-								log.Println("JsonData[0]: ...")
-								log.Println(string(JsonData[0]))
 								
 								/*for i, _ := range JsonData[0] {
 									log.Println("p.KingOfName-"+pages[1][i].KingOfName)
