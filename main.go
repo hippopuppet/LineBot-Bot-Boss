@@ -143,25 +143,28 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								}
 								
 								for _, bossinfo := range dbResult[0].BossInfo {
-								log.Println("bossinfo.Resurrection-"+bossinfo.Resurrection)
+								log.Println("bossinfo.Resurrection "+bossinfo.Resurrection)
 								bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
 								if err != nil {
 									log.Print(err)
 								}
 								ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
-								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
+								log.Println("ResurrectionA "+strconv.Itoa(ResurrectionA))
 
 								JetLag := NOWTIME - ResurrectionA
-								log.Println("JetLag-"+strconv.Itoa(JetLag))
+								log.Println("JetLag "+strconv.Itoa(JetLag))
 								if JetLag < 0 {
 									JetLag = -JetLag
 								}
-								log.Println("UJetLag-"+strconv.Itoa(JetLag))
+								log.Println("UJetLag "+strconv.Itoa(JetLag))
 
-								if JetLag <=  10 {
-									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: "+bossinfo.KingOfName )).Do(); err != nil {
-										log.Print(err)
+								if JetLag <= 10 {
+									if groupID != ""{
+										if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: "+bossinfo.KingOfName )).Do(); err != nil {
+											log.Print(err)
+										}
 									}
+									
 								}
 							}
 
@@ -209,21 +212,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										break
 									}
 								}
-																
-								JsonData, err := json.Marshal(dbResult)
+								
+								c.Insert(dbResult)		
+								/*JsonData, err := json.Marshal(dbResult)
 								if err != nil {
 									log.Print(err)
 								}
 								log.Println("Marshal result: ...")
-								log.Println(string(JsonData))
+								log.Println(string(JsonData))*/
 							}
-						}
-					}
+						}// ==Die
+					}// ==@BOSS
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
 					}
-				}
+				}// ==@
 				
 				
 			
