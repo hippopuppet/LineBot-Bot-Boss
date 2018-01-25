@@ -185,7 +185,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println(dbResult)
 					
 					log.Println("BOSSINFO: ...")
-					log.Println(dbResult[0]["BOSSINFO"].(map[string]interface{}))
+					log.Println(dbResult["BOSSINFO"])
+					
+					log.Println("kingofname: ...")
+					log.Println(dbResult["kingofname"])
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
