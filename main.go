@@ -151,7 +151,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
 
-								if NOWTIME - ResurrectionA <=  10 {
+								if Abs(NOWTIME - ResurrectionA) <=  10 {
 									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: "+bossinfo.KingOfName )).Do(); err != nil {
 										log.Print(err)
 									}
