@@ -67,26 +67,6 @@ var checkBossTimer time.Ticker
 
 func main() {
 	var err error
-	
-	session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
-    if err != nil {
-       panic(err)
-    }
-    defer session.Close()
-
-    // Optional. Switch the session to a monotonic behavior.
-    session.SetMode(mgo.Monotonic, true)
-
-    c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-	log.Println("Will to find")
-	var result []Page
-    err = c.Find(nil).All(&result)
-    if err != nil {
-       log.Fatal(err)
-    }
-	log.Println("result: ...")
-	log.Println(result)
-    
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
@@ -183,7 +163,26 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							}
 						}
 					}
-					
+
+					session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+					if err != nil {
+					   panic(err)
+					}
+					defer session.Close()
+
+					// Optional. Switch the session to a monotonic behavior.
+					session.SetMode(mgo.Monotonic, true)
+
+					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+					log.Println("Will to find")
+					var result []Page
+					err = c.Find(nil).All(&result)
+					if err != nil {
+					   log.Fatal(err)
+					}
+					log.Println("result: ...")
+					log.Println(result)
+    
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
 					}
