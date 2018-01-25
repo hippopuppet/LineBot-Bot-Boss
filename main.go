@@ -29,7 +29,7 @@ import (
 
 type JsonData struct {
 	JsonID ID 
-    BossInfo []BossInfo `json:"BOSSINFO"`
+    BossInfo []BossInfo 
 }
 
 type ID struct {
