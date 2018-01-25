@@ -80,8 +80,8 @@ func main() {
 
     c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 	log.Println("Will to find")
-	result := Page{}
-    err = c.Find(bson.M{"refreshtick": "120"}).One(&result)
+	result := bson.M{}
+    err = c.Find().All(&result)
     if err != nil {
        log.Fatal(err)
     }
