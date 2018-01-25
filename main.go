@@ -184,7 +184,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult JSONDATA
+					var dbResult []JSONDATA
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
@@ -192,9 +192,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println("result: ...")
 					log.Println(dbResult)
 
-				
-
-					
+					bytes, err := json.Marshal(dbResult)
+					if err != nil {
+						log.Print(err)
+					}
+					log.Println("Marshal result: ...")
+					log.Println(string(bytes))
 					
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
