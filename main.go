@@ -196,11 +196,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println("result: ...")
 					log.Println(dbResult)
 
-					log.Println("result[0]: ...")
-					log.Println(dbResult[0])
+					var BossJsonData []JSONDATA
+					json.Unmarshal(dbResult, &BossJsonData)
 
-					log.Println("result[0].BOSSINFO: ...")
-					log.Println(dbResult[0].BossInfo)
+					log.Println("BossJsonData: ...")
+					log.Println(BossJsonData)
+
 					
 					
     
