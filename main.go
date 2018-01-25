@@ -195,10 +195,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}()
 				}
-				 if string(message.Text[0]) == "@" {
+				 if string(message.Text[0]) == "!" {
 					result := strings.Split(message.Text," ")
 					log.Println("result[0]-"+result[0])
-					if result[0] == "@BOSS" {
+					if result[0] == "!BOSS" {
 						log.Println("result[2]-"+result[2])
 						if result[2] == "Die" {
 							log.Println("result[3]-"+result[3])
