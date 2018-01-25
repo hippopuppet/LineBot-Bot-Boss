@@ -227,7 +227,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										if err != nil {
 											log.Print(err)
 										}
-										intNewDieTime = convertMinutetoTime(intNewDieMinute + intRefreshTick)
+										intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
 										strNewDieTime, err := strconv.Itoa(intNewDieTime)
 										if err != nil {
 											log.Print(err)
