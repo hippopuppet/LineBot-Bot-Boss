@@ -243,7 +243,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 										// Update
 										/colQuerier := bson.M{"kingofname": dbResult[0].BossInfo[i].KingOfName} 
-										//colQuerier := bson.M{"_id": "ObjectIdHex(\"5a688511d1bd33c6d81b1abb\")" } 
+										
 										log.Print("kingofname: ")
 										log.Println(colQuerier)
 
