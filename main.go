@@ -181,7 +181,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult map[string]JsonData
+					var dbResult map[int]JsonData
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
