@@ -185,6 +185,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						if result[2] == "Die" {
 							log.Println("result[3]-"+result[3])
 							if result[3] != "" {
+								
 								log.Println("CONNECT DB....")
 								//[CONNECT DB]
 								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
@@ -211,7 +212,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										log.Println("assiagn die time ...."+ dbResult[0].BossInfo[i].Die)
 										dbResult[0].BossInfo[i].Die = result[3]
 
-										ResurrectionA := convertTimetoMinute(result[3])
+										intDie, err := strconv.Atoi(result[3])
+										if err != nil {
+											log.Print(err)
+										}
+
+										ResurrectionA := convertTimetoMinute(intDie)
 										dbResult[0].BossInfo[i].Resurrection = ResurrectionA + dbResult[0].BossInfo[i].RefreshTick
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
