@@ -135,9 +135,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE-"+p.KingOfName )).Do(); err != nil {
 										log.Print(err)
 									}
-								}*/
+								}
 								
-							}
+							}*/
 						case <- doneChan:
 							log.Println("Done")
 							return
