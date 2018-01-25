@@ -53,7 +53,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() []JSONDATA {
+func getPages() JSONDATA {
    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
         log.Println(err.Error())
