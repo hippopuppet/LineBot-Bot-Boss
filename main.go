@@ -119,8 +119,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Println("checkBossTimer expired")
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
-							pages := getPages()
-							/*for _, p := range pages {
+							/*pages := getPages()
+							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
 								p_Resurrection, err := strconv.Atoi(p.Resurrection)
 								if err != nil {
