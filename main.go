@@ -122,7 +122,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Println("checkBossTimer expired")
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
-							/*bossinfo := getBossJson()
+							bossinfo := getBossJson()
 							for _, p := range bossinfo {
 								log.Println("p.Resurrection-"+p.Resurrection)
 								p_Resurrection, err := strconv.Atoi(p.Resurrection)
@@ -138,7 +138,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									}
 								}
 								
-							}*/
+							}
 						case <- doneChan:
 							log.Println("Done")
 							return
@@ -172,18 +172,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								if err != nil {
 								   log.Fatal(err)
 								}
-								log.Println("result: ...")
-								log.Println(dbResult)
-
-								log.Println("result[0]: ...")
-								log.Println(dbResult[0])
-
-								log.Println("result[0].BossInfo[0].KingOfName: ...")
-								log.Println(dbResult[0].BossInfo[0].KingOfName)
-								log.Println("result[0].BossInfo[1].KingOfName: ...")
-								log.Println(dbResult[0].BossInfo[1].KingOfName)
-
-
+								
 								for i, _ := range dbResult[0].BossInfo {
 									log.Println("p.KingOfName-"+dbResult[0].BossInfo[i].KingOfName)
 									log.Println("compare ...."+ result[1])
