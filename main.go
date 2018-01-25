@@ -28,13 +28,9 @@ import (
 )
 
 type JSONDATA struct {
-	BossInfoId ID `bson:"_id" json:"_id"`
     BossInfo []BOSSINFO `bson:"BOSSINFO" json:"BOSSINFO"`
 }
 
-type ID struct {
-    Id  string 
-}
 
 type BOSSINFO struct {
     KingOfName  string `bson:"kingofname" json:"kingofname"`
@@ -64,7 +60,7 @@ func getPages() []JSONDATA {
         os.Exit(1)
     }
 
-    var c []JSONDATA
+    var c JSONDATA
     json.Unmarshal(raw, &c)
     return c
 }
