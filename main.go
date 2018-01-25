@@ -81,7 +81,7 @@ func main() {
     c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 	log.Println("Will to find")
 	result := bson.M{}
-    err = c.Find().All(&result)
+    err = c.Find(nil).All(&result)
     if err != nil {
        log.Fatal(err)
     }
