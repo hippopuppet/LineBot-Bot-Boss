@@ -234,13 +234,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
 										// Update
-										updateData := BOSSINFO{ Die: dbResult[0].BossInfo[i].Die, Resurrection: dbResult[0].BossInfo[i].Resurrection }
-										colQuerier := bson.M{"kingofname": dbResult[0].BossInfo[i].KingOfName} 
+										kingofname := dbResult[0].BossInfo[i].KingOfName
+										colQuerier := bson.M{"kingofname": kingofname} 
 										log.Print("kingofname: ")
 										log.Println(colQuerier)
 
-										//change := bson.M{"$set": bson.M{"die": dbResult[0].BossInfo[i].Die, "resurrection": dbResult[0].BossInfo[i].Resurrection}}
-										change := bson.M{"$set": bson.M{"BOSSINFO": updateData}}
+										die := dbResult[0].BossInfo[i].Die
+										resurrection := dbResult[0].BossInfo[i].Resurrection
+										change := bson.M{"$set": bson.M{"die": die, "resurrection": resurrection}}
 										err = c.Update(colQuerier, change)
 										if err != nil {
 											panic(err)
