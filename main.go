@@ -118,18 +118,37 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					go func() {
 						for {
 						select {
-						case <- checkBossTimer:
-							log.Println("checkBossTimer expired")
-							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
-							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
-							bossinfo := getBossJson()
-							for _, p := range bossinfo {
-								log.Println("p.Resurrection-"+p.Resurrection)
-								p_Resurrection, err := strconv.Atoi(p.Resurrection)
+							case <- checkBossTimer:
+								log.Println("checkBossTimer expired")
+								NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
+								log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
+
+								log.Println("CONNECT DB....")
+								//[CONNECT DB]
+								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+								if err != nil {
+								   panic(err)
+								}
+								defer session.Close()
+
+								// Optional. Switch the session to a monotonic behavior.
+								session.SetMode(mgo.Monotonic, true)
+
+								c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+								log.Println("find data...")
+								var dbResult []JSONDATA
+								err = c.Find(nil).All(&dbResult)
+								if err != nil {
+								   log.Fatal(err)
+								}
+								
+								for _, bossinfo := range dbResult[0].BossInfo {
+								log.Println("bossinfo.Resurrection-"+bossinfo.Resurrection)
+								bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
 								if err != nil {
 									log.Print(err)
 								}
-								ResurrectionA := convertTimetoMinute(p_Resurrection)
+								ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
 
 								if NOWTIME - ResurrectionA <=  10 {
@@ -137,11 +156,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										log.Print(err)
 									}
 								}
-								
 							}
-						case <- doneChan:
-							log.Println("Done")
-							return
+
+								
+							case <- doneChan:
+								log.Println("Done")
+								return
 							}
 						}
 					}()
