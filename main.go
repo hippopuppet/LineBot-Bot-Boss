@@ -28,12 +28,7 @@ import (
 )
 
 type JsonData struct {
-	JsonID ID 
-    BossInfo []BossInfo 
-}
-
-type ID struct {
-    Id  int 
+    BOSSINFO []BossInfo 
 }
 
 type BossInfo struct {
