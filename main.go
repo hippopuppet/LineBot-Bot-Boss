@@ -28,8 +28,8 @@ import (
 )
 
 type JSONDATA struct {
-	BossInfoId ID `json:"_id"`
-    BossInfo []BOSSINFO `json:"BOSSINFO"`
+	BossInfoId ID `bson:"_id" json:"_id"`
+    BossInfo []BOSSINFO `bson:"BOSSINFO" json:"BOSSINFO"`
 }
 
 type ID struct {
@@ -37,10 +37,10 @@ type ID struct {
 }
 
 type BOSSINFO struct {
-    KingOfName  string `json:"kingofname"`
-	RefreshTick string `json:"refreshtick"`
-	Die string `json:"die"`
-    Resurrection string `json:"resurrection"`
+    KingOfName  string `bson:"kingofname" json:"kingofname"`
+	RefreshTick string `bson:"refreshtick json:"refreshtick"`
+	Die string `bson:"die" json:"die"`
+    Resurrection string `bson:"resurrection json:"resurrection"`
 }
 
 func (p JSONDATA) toString() string {
