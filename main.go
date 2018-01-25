@@ -188,10 +188,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println(bossinfo)
 
 					for i,  object:= range bossinfo {
-						log.Println("kingofname: ..."+ i+" : ")
-						log.Println(object[i]["kingofname"])
-						log.Println("die: ..."+ i+" : ")
-						log.Println(object[i]["die"])
+						log.Println("kingofname: ..."+ strconv.Itoa(i) +" : ")
+						log.Println(object.KingOfName)
+						log.Println("die: ..."+ strconv.Itoa(i) +" : ")
+						log.Println(object.Die)
 					}
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
