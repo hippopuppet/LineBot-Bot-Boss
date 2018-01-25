@@ -156,10 +156,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("load page....")
 								pages := getPages()
 								log.Println(pages)
-								for i, _ := range pages {
-									log.Println("p.KingOfName-"+pages[i].KingOfName)
+								/*
+								for i, _ := range pages[1] {
+									log.Println("p.KingOfName-"+pages[1][i].KingOfName)
 									log.Println("compare ...."+ result[1])
-									if result[1] == pages[i].KingOfName {
+									if result[1] == pages[1][i].KingOfName {
 										pages[i].Die = result[3]
 										log.Println("assiagn die time ...."+ pages[i].Die)
 										break
@@ -171,6 +172,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									log.Println(err)
 								}
 								log.Println("WriteFile ...."+string(pagesJson) )
+								*/
 							}
 						}
 					}
