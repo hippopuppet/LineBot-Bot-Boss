@@ -212,7 +212,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										dbResult[0].BossInfo[i].Die = result[3]
 
 										ResurrectionA := convertTimetoMinute(result[3])
-										dbResult[0].BossInfo[i].Resurrection = ResurrectionA + dbResult[0].BossInfo[i].Refreshtick
+										dbResult[0].BossInfo[i].Resurrection = ResurrectionA + dbResult[0].BossInfo[i].RefreshTick
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
 										// Update
