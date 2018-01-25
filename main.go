@@ -176,13 +176,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var result []bson.M
-					err = c.Find(nil).All(&result)
+					var dbResult []bson.M
+					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
 					}
 					log.Println("result: ...")
-					log.Println(result)
+					log.Println(dbResult)
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
