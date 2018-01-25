@@ -189,11 +189,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println("result: ...")
 					log.Println(dbResult)
 					
-					bossinfo := dbResult[0]["BOSSINFO"]
-					log.Println("BOSSINFO: ...")
-					log.Println(bossinfo)
+					josondata := dbResult[0]
+					log.Println("josondata: ...")
+					log.Println(josondata)
 
-					for i,  object:= range bossinfo {
+					for i,  object:= range josondata.BossInfo {
 						log.Println("kingofname: ..."+ strconv.Itoa(i) +" : ")
 						log.Println(object.KingOfName)
 						log.Println("die: ..."+ strconv.Itoa(i) +" : ")
