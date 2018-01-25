@@ -183,25 +183,23 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("result[0].BossInfo[1].KingOfName: ...")
 								log.Println(dbResult[0].BossInfo[1].KingOfName)
 
+
+								for i, _ := range dbResult[0] {
+									log.Println("p.KingOfName-"+dbResult[0].BossInfo[i].KingOfName)
+									log.Println("compare ...."+ result[1])
+									if result[1] == dbResult[0].BossInfo[i].KingOfName {
+										dbResult[0].BossInfo[i].Die = result[3]
+										log.Println("assiagn die time ...."+ dbResult[0].BossInfo[i].Die)
+										break
+									}
+								}
+																
 								JsonData, err := json.Marshal(dbResult)
 								if err != nil {
 									log.Print(err)
 								}
 								log.Println("Marshal result: ...")
 								log.Println(string(JsonData))
-
-								
-								/*for i, _ := range JsonData[0] {
-									log.Println("p.KingOfName-"+pages[1][i].KingOfName)
-									log.Println("compare ...."+ result[1])
-									if result[1] == pages[1][i].KingOfName {
-										pages[i].Die = result[3]
-										log.Println("assiagn die time ...."+ pages[i].Die)
-										break
-									}
-								}*/
-								
-								
 							}
 						}
 					}
