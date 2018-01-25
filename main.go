@@ -27,11 +27,16 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-type JsonData struct {
-    BOSSINFO []BossInfo 
+type JSONDATA struct {
+	BossInfoId ID `json:"_id"`
+    BossInfo []BOSSINFO `json:"BOSSINFO"`
 }
 
-type BossInfo struct {
+type ID struct {
+    Id  string 
+}
+
+type BOSSINFO struct {
     KingOfName  string `json:"kingofname"`
 	RefreshTick string `json:"refreshtick"`
 	Die string `json:"die"`
@@ -183,7 +188,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult []map[string]JsonData
+					var dbResult []JsonData
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
