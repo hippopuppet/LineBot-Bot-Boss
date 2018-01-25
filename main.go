@@ -227,8 +227,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									}
 								}
 								
-								
-								c.Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"name": "new Name"}}	
 								/*JsonData, err := json.Marshal(dbResult)
 								if err != nil {
 									log.Print(err)
