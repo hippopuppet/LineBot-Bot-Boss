@@ -228,11 +228,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 											log.Print(err)
 										}
 										intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
-										strNewDieTime, err := strconv.Itoa(intNewDieTime)
-										if err != nil {
-											log.Print(err)
-										} 
-
+										strNewDieTime := strconv.Itoa(intNewDieTime)
+										
 										dbResult[0].BossInfo[i].Resurrection = strNewDieTime
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
