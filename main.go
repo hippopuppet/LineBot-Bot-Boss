@@ -233,9 +233,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										dbResult[0].BossInfo[i].Resurrection = strNewDieTime
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
+										var dbM []bson.M
+										err = c.Find(nil).All(&dbM)
+										if err != nil {
+										   log.Fatal(err)
+										}
+										log.Println("dbM ...")
+										log.Println(dbM)
+
 										// Update
-										//colQuerier := bson.M{"kingofname": dbResult[0].BossInfo[i].KingOfName} 
-										colQuerier := bson.M{"_id" : ObjectId("5a688511d1bd33c6d81b1abb")}
+										colQuerier := bson.M{"kingofname": dbResult[0].BossInfo[i].KingOfName} 
 										log.Print("kingofname: ")
 										log.Println(colQuerier)
 
