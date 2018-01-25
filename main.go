@@ -28,7 +28,12 @@ import (
 )
 
 type JsonData struct {
+	JsonID ID 
     BossInfo []BossInfo `json:"BOSSINFO"`
+}
+
+type ID struct {
+    Id  int 
 }
 
 type BossInfo struct {
@@ -52,14 +57,14 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() []BossInfo {
+func getPages() []JsonData {
    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
         log.Println(err.Error())
         os.Exit(1)
     }
 
-    var c []BossInfo
+    var c []JsonData
     json.Unmarshal(raw, &c)
     return c
 }
