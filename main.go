@@ -31,12 +31,19 @@ type JSONDATA struct {
     BossInfo []BOSSINFO `bson:"BOSSINFO" json:"BOSSINFO"`
 }
 
-
 type BOSSINFO struct {
     KingOfName  string `bson:"kingofname" json:"kingofname"`
 	RefreshTick string `bson:"refreshtick" json:"refreshtick"`
 	Die string `bson:"die" json:"die"`
     Resurrection string `bson:"resurrection" json:"resurrection"`
+}
+
+func convertTimetoMinute(orgTime int) int {
+	H := orgTime/100
+	M := orgTime - (H*100)
+	A := H*60+M
+	
+	return A
 }
 
 func (p JSONDATA) toString() string {
@@ -116,15 +123,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 							/*bossinfo := getBossJson()
-							for _, p := range pages {
+							for _, p := range bossinfo {
 								log.Println("p.Resurrection-"+p.Resurrection)
 								p_Resurrection, err := strconv.Atoi(p.Resurrection)
 								if err != nil {
 									log.Print(err)
 								}
-								ResurrectionH := p_Resurrection/100
-								ResurrectionM := p_Resurrection - (ResurrectionH*100)
-								ResurrectionA := ResurrectionH*60+ResurrectionM
+								ResurrectionA := convertTimetoMinute(p_Resurrection)
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
 
 								if NOWTIME - ResurrectionA <=  10 {
@@ -149,11 +154,38 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						if result[2] == "Die" {
 							log.Println("result[3]-"+result[3])
 							if result[3] != "" {
-								log.Println("load page....")
-								bossinfo := getBossJson()
-								log.Println(bossinfo)
-								/*
-								for i, _ := range pages[1] {
+								log.Println("CONNECT DB....")
+								//[CONNECT DB]
+								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+								if err != nil {
+								   panic(err)
+								}
+								defer session.Close()
+
+								// Optional. Switch the session to a monotonic behavior.
+								session.SetMode(mgo.Monotonic, true)
+
+								c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+								log.Println("find data...")
+								var dbResult []JSONDATA
+								err = c.Find(nil).All(&dbResult)
+								if err != nil {
+								   log.Fatal(err)
+								}
+								log.Println("result: ...")
+								log.Println(dbResult)
+
+								JsonData, err := json.Marshal(dbResult)
+								if err != nil {
+									log.Print(err)
+								}
+								log.Println("Marshal result: ...")
+								log.Println(string(JsonData))
+
+								og.Println("JsonData[0]: ...")
+								log.Println(string(JsonData[0]))
+								
+								/*for i, _ := range JsonData[0] {
 									log.Println("p.KingOfName-"+pages[1][i].KingOfName)
 									log.Println("compare ...."+ result[1])
 									if result[1] == pages[1][i].KingOfName {
@@ -161,44 +193,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										log.Println("assiagn die time ...."+ pages[i].Die)
 										break
 									}
-								}
-								pagesJson, _ := json.Marshal(pages)
-								err = ioutil.WriteFile("BossRefreshInfo.json", pagesJson, 0644)
-								if err != nil {
-									log.Println(err)
-								}
-								log.Println("WriteFile ...."+string(pagesJson) )
-								*/
+								}*/
+								
+								
 							}
 						}
 					}
-					//[CONNECT DB]
-					session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
-					if err != nil {
-					   panic(err)
-					}
-					defer session.Close()
-
-					// Optional. Switch the session to a monotonic behavior.
-					session.SetMode(mgo.Monotonic, true)
-
-					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-					log.Println("Will to find")
-					var dbResult []JSONDATA
-					err = c.Find(nil).All(&dbResult)
-					if err != nil {
-					   log.Fatal(err)
-					}
-					log.Println("result: ...")
-					log.Println(dbResult)
-
-					bytes, err := json.Marshal(dbResult)
-					if err != nil {
-						log.Print(err)
-					}
-					log.Println("Marshal result: ...")
-					log.Println(string(bytes))
-					
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
