@@ -47,6 +47,14 @@ func convertTimetoMinute(orgTime int) int {
 	return A
 }
 
+func convertMinutetoTime(orgMinute int) int {
+	H := orgMinute/60
+	M := orgMinute%60
+	T := (H*100)+M
+	
+	return T
+}
+
 func (p JSONDATA) toString() string {
     return toJson(p)
 }
@@ -185,7 +193,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						if result[2] == "Die" {
 							log.Println("result[3]-"+result[3])
 							if result[3] != "" {
-								
 								log.Println("CONNECT DB....")
 								//[CONNECT DB]
 								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
@@ -211,14 +218,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									if result[1] == dbResult[0].BossInfo[i].KingOfName {
 										log.Println("assiagn die time ...."+ dbResult[0].BossInfo[i].Die)
 										dbResult[0].BossInfo[i].Die = result[3]
-
-										intDie, err := strconv.Atoi(result[3])
+										intNewDie, err := strconv.Atoi(result[3])
 										if err != nil {
 											log.Print(err)
 										}
+										intNewDieMinute := convertTimetoMinute(intNewDie)
+										intRefreshTick, err := strconv.Atoi(dbResult[0].BossInfo[i].RefreshTick)
+										if err != nil {
+											log.Print(err)
+										}
+										intNewDieTime = convertMinutetoTime(intNewDieMinute + intRefreshTick)
+										strNewDieTime, err := strconv.Itoa(intNewDieTime)
+										if err != nil {
+											log.Print(err)
+										} 
 
-										ResurrectionA := convertTimetoMinute(intDie)
-										dbResult[0].BossInfo[i].Resurrection = ResurrectionA + dbResult[0].BossInfo[i].RefreshTick
+										dbResult[0].BossInfo[i].Resurrection = strNewDieTime
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
 
 										// Update
