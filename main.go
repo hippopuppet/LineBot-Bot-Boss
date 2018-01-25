@@ -178,8 +178,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("result[0]: ...")
 								log.Println(dbResult[0])
 
-								log.Println("result[0].KingOfName: ...")
-								log.Println(dbResult[0].KingOfName)
+								log.Println("result[0].BossInfo[0].KingOfName: ...")
+								log.Println(dbResult[0].BossInfo[0].KingOfName)
+								log.Println("result[0].BossInfo[1].KingOfName: ...")
+								log.Println(dbResult[0].BossInfo[1].KingOfName)
 
 								JsonData, err := json.Marshal(dbResult)
 								if err != nil {
