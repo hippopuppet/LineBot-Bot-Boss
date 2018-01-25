@@ -116,14 +116,24 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if message.Text == "DONE" {
+				if message.Text == "STOP" {
+					if groupID != ""{
+						if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("STOP CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
+							log.Print(err)
+						}
+					}
 					doneChan <- true
 				}
-				 if message.Text == "STOP" {
+				/*if message.Text == "STOP" {
 					checkBossTimer.Stop()
-				}
+				}*/
 				 if message.Text == "START" {
-					checkBossTimer := time.NewTicker(time.Second*10).C
+					checkBossTimer := time.NewTicker(time.Second*60).C
+					if groupID != ""{
+						if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
+							log.Print(err)
+						}
+					}
 					go func() {
 						for {
 						select {
@@ -169,7 +179,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 								if JetLag <= 10 {
 									if groupID != ""{
-										if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: "+bossinfo.KingOfName )).Do(); err != nil {
+										if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
 											log.Print(err)
 										}
 									}
@@ -243,17 +253,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 										// Update
 										colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
-										//colQuerier := bson.M{"_id": "ObjectIdHex(\"5a688511d1bd33c6d81b1abb\")" } 
-										//log.Print("kingofname: ")
-										//log.Println(colQuerier)
 										change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
 										//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 										err = c.Update(colQuerier, change)
 										if err != nil {
 											panic(err)
 										}
-										
-
 										break
 									}
 								}
