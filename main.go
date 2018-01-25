@@ -246,7 +246,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										//colQuerier := bson.M{"_id": "ObjectIdHex(\"5a688511d1bd33c6d81b1abb\")" } 
 										//log.Print("kingofname: ")
 										//log.Println(colQuerier)
-										change := bson.M{"$set": bson.M{"die": dbResult[0].BossInfo[i].Die, "resurrection": dbResult[0].BossInfo[i].Resurrection}}
+										change := bson.M{"$set": bson.M{"BOSSINFO":bson.M{"die": dbResult[0].BossInfo[i].Die, "resurrection": dbResult[0].BossInfo[i].Resurrection}}}
 										id := bson.ObjectIdHex("5a688511d1bd33c6d81b1abb")
 										info, err := c.UpsertId(id, change)
 										if err != nil {
