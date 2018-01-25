@@ -120,7 +120,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 							pages := getPages()
-							for _, p := range pages {
+							/*for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
 								p_Resurrection, err := strconv.Atoi(p.Resurrection)
 								if err != nil {
@@ -135,7 +135,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE-"+p.KingOfName )).Do(); err != nil {
 										log.Print(err)
 									}
-								}
+								}*/
 								
 							}
 						case <- doneChan:
