@@ -188,13 +188,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult JSONDATA
+					var dbResult []JSONDATA
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
 					}
 					log.Println("result: ...")
 					log.Println(dbResult)
+
+					log.Println("result[0]: ...")
+					log.Println(dbResult[0])
+
+					log.Println("result[0].BOSSINFO: ...")
+					log.Println(dbResult[0].BossInfo)
 					
 					
     
