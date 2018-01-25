@@ -183,7 +183,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println("result: ...")
 					log.Println(dbResult)
 					
-					bossinfo := dbResult["BOSSINFO"]
+					bossinfo := dbResult[0]["BOSSINFO"]
 					log.Println("BOSSINFO: ...")
 					log.Println(bossinfo)
 
