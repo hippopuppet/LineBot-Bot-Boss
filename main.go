@@ -184,7 +184,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println(dbResult[0].BossInfo[1].KingOfName)
 
 
-								for i, _ := range dbResult[0] {
+								for i, _ := range dbResult[0].BossInfo {
 									log.Println("p.KingOfName-"+dbResult[0].BossInfo[i].KingOfName)
 									log.Println("compare ...."+ result[1])
 									if result[1] == dbResult[0].BossInfo[i].KingOfName {
