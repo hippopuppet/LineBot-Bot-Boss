@@ -248,7 +248,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										//log.Println(colQuerier)
 										change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
 										//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
-										err := c.Update(colQuerier, change)
+										err = c.Update(colQuerier, change)
 										if err != nil {
 											panic(err)
 										}
