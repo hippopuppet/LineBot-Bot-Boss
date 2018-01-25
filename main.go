@@ -34,9 +34,9 @@ type JSONDATA struct {
 
 type BOSSINFO struct {
     KingOfName  string `bson:"kingofname" json:"kingofname"`
-	RefreshTick string `bson:"refreshtick json:"refreshtick"`
+	RefreshTick string `bson:"refreshtick" json:"refreshtick"`
 	Die string `bson:"die" json:"die"`
-    Resurrection string `bson:"resurrection json:"resurrection"`
+    Resurrection string `bson:"resurrection" json:"resurrection"`
 }
 
 func (p JSONDATA) toString() string {
