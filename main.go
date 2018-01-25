@@ -26,17 +26,19 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 	"gopkg.in/mgo.v2"
 )
-type Page struct {
-	BossInfo string `json:"BOSSINFO"`
-	[
-		KingOfName  string `json:"kingofname"`
-		RefreshTick string `json:"refreshtick"`
-		Die string `json:"die"`
-		Resurrection string `json:"resurrection"`
-	]
+
+type JsonData struct {
+    BossInfo []BossInfo `json:"BOSSINFO"`
 }
 
-func (p Page) toString() string {
+type BossInfo struct {
+    KingOfName  string `json:"kingofname"`
+	RefreshTick string `json:"refreshtick"`
+	Die string `json:"die"`
+    Resurrection string `json:"resurrection"`
+}
+
+func (p JsonData) toString() string {
     return toJson(p)
 }
 
@@ -50,14 +52,14 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() []Page {
+func getPages() []BossInfo {
    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
         log.Println(err.Error())
         os.Exit(1)
     }
 
-    var c []Page
+    var c []BossInfo
     json.Unmarshal(raw, &c)
     return c
 }
@@ -179,7 +181,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult []map[string][]Page
+					var dbResult []map[string][]JsonData
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
