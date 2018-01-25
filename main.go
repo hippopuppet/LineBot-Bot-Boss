@@ -25,6 +25,7 @@ import (
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type JSONDATA struct {
@@ -207,13 +208,28 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									log.Println("p.KingOfName-"+dbResult[0].BossInfo[i].KingOfName)
 									log.Println("compare ...."+ result[1])
 									if result[1] == dbResult[0].BossInfo[i].KingOfName {
-										dbResult[0].BossInfo[i].Die = result[3]
 										log.Println("assiagn die time ...."+ dbResult[0].BossInfo[i].Die)
+										dbResult[0].BossInfo[i].Die = result[3]
+
+										ResurrectionA := convertTimetoMinute(result[3])
+										dbResult[0].BossInfo[i].Resurrection = ResurrectionA + dbResult[0].BossInfo[i].refreshtick
+										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
+
+										// Update
+										colQuerier := bson.M{"kingofname": dbResult[0].BossInfo[i].KingOfName }
+										change := bson.M{"$set": bson.M{"die": dbResult[0].BossInfo[i].Die, "resurrection": dbResult[0].BossInfo[i].Resurrection}}
+										err = c.Update(colQuerier, change)
+										if err != nil {
+											panic(err)
+										}
+
+
 										break
 									}
 								}
 								
-								c.Insert(dbResult)		
+								
+								c.Update(bson.M{"_id": id}, bson.M{"$set": bson.M{"name": "new Name"}}	
 								/*JsonData, err := json.Marshal(dbResult)
 								if err != nil {
 									log.Print(err)
