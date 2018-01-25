@@ -182,7 +182,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("Marshal result: ...")
 								log.Println(string(JsonData))
 
-								og.Println("JsonData[0]: ...")
+								log.Println("JsonData[0]: ...")
 								log.Println(string(JsonData[0]))
 								
 								/*for i, _ := range JsonData[0] {
