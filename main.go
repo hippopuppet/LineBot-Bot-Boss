@@ -85,7 +85,7 @@ func main() {
     if err != nil {
        log.Fatal(err)
     }
-	log.Println("KingOfName: "+ result.KingOfName)
+	log.Println("result: "+ result)
     
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
