@@ -53,7 +53,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() JSONDATA {
+func getBossJson() JSONDATA {
    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
         log.Println(err.Error())
@@ -115,7 +115,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Println("checkBossTimer expired")
 							NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 							log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
-							/*pages := getPages()
+							/*bossinfo := getBossJson()
 							for _, p := range pages {
 								log.Println("p.Resurrection-"+p.Resurrection)
 								p_Resurrection, err := strconv.Atoi(p.Resurrection)
@@ -150,8 +150,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Println("result[3]-"+result[3])
 							if result[3] != "" {
 								log.Println("load page....")
-								pages := getPages()
-								log.Println(pages)
+								bossinfo := getBossJson()
+								log.Println(bossinfo)
 								/*
 								for i, _ := range pages[1] {
 									log.Println("p.KingOfName-"+pages[1][i].KingOfName)
@@ -184,13 +184,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult []JSONDATA
+					var dbResult bson.M
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
 					}
 					log.Println("result: ...")
 					log.Println(dbResult)
+
+
 
 				
 
