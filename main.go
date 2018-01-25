@@ -27,10 +27,13 @@ import (
 	"gopkg.in/mgo.v2"
 )
 type Page struct {
-    KingOfName  string `json:"kingofname"`
-	RefreshTick string `json:"refreshtick"`
-	Die string `json:"die"`
-    Resurrection string `json:"resurrection"`
+	BossInfo string `json:"BOSSINFO"`
+	[
+		KingOfName  string `json:"kingofname"`
+		RefreshTick string `json:"refreshtick"`
+		Die string `json:"die"`
+		Resurrection string `json:"resurrection"`
+	]
 }
 
 func (p Page) toString() string {
