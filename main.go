@@ -22,7 +22,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
-	"math"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"gopkg.in/mgo.v2"
@@ -153,8 +152,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("ResurrectionA-"+strconv.Itoa(ResurrectionA))
 
 								JetLag := NOWTIME - ResurrectionA
-								UJetLag := Abs(JetLag)
-								if UJetLag <=  10 {
+								log.Println("JetLag-"+strconv.Itoa(JetLag))
+								if JetLag < 0 {
+									JetLag = -JetLag
+								}
+								log.Println("UJetLag-"+strconv.Itoa(JetLag))
+
+								if JetLag <=  10 {
 									if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: "+bossinfo.KingOfName )).Do(); err != nil {
 										log.Print(err)
 									}
