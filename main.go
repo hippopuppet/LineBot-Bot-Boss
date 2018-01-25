@@ -181,19 +181,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 					   log.Fatal(err)
 					}
-					log.Println("result: ...")
+					log.Println("db result: ...")
 					log.Println(dbResult)
-					
-					bossinfo := dbResult[0]["BOSSINFO"]
-					log.Println("BOSSINFO: ...")
-					log.Println(bossinfo)
 
-					for i,  object:= range bossinfo {
-						log.Println("kingofname: ..."+ i+" : ")
-						log.Println(object[i]["kingofname"])
-						log.Println("die: ..."+ i+" : ")
-						log.Println(object[i]["die"])
-					}
+					var decodingResult []Page
+					json.Unmarshal(dbResult, &decodingResult)
+					log.Println("decoding result: ...")
+					log.Println(decodingResult)
+					
+					
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
