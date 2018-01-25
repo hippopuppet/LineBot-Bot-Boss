@@ -25,6 +25,7 @@ import (
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 type Page struct {
     KingOfName  string `json:"kingofname"`
@@ -175,7 +176,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult []map[string]string
+					var dbResult []bson.M
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
@@ -185,6 +186,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					
 					log.Println("BOSSINFO: ...")
 					log.Println(dbResult[0]["BOSSINFO"])
+
+					log.Println("kingofname: ...")
+					log.Println(dbResult[0]["BOSSINFO"]["kingofname"])
     
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
 						log.Print(err)
