@@ -43,7 +43,7 @@ type BOSSINFO struct {
     Resurrection string `json:"resurrection"`
 }
 
-func (p JsonData) toString() string {
+func (p JSONDATA) toString() string {
     return toJson(p)
 }
 
@@ -57,14 +57,14 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getPages() []JsonData {
+func getPages() []JSONDATA {
    raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
     if err != nil {
         log.Println(err.Error())
         os.Exit(1)
     }
 
-    var c []JsonData
+    var c []JSONDATA
     json.Unmarshal(raw, &c)
     return c
 }
@@ -188,7 +188,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 					log.Println("Will to find")
-					var dbResult []JsonData
+					var dbResult []JSONDATA
 					err = c.Find(nil).All(&dbResult)
 					if err != nil {
 					   log.Fatal(err)
