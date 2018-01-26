@@ -223,7 +223,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								if err != nil {
 								   log.Fatal(err)
 								}
-								
+								isFound := false
 								for i, _ := range dbResult[0].BossInfo {
 									log.Println("p.KingOfName-"+dbResult[0].BossInfo[i].KingOfName)
 									log.Println("compare ...."+ result[1])
@@ -240,19 +240,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 											log.Print(err)
 										}
 										intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
+
 										strNewDieTime := strconv.Itoa(intNewDieTime)
 										
 										dbResult[0].BossInfo[i].Resurrection = strNewDieTime
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
-
+										/*
 										var dbM []bson.M
 										err = c.Find(nil).All(&dbM)
 										if err != nil {
 										   log.Fatal(err)
 										}
-										log.Println("dbM ...")
-										log.Println(dbM)
-
+										//log.Println("dbM ...")
+										//log.Println(dbM)
+										*/
 										// Update
 										colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
 										change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
@@ -261,10 +262,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										if err != nil {
 											panic(err)
 										}
+										if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
+											log.Print(err)
+										}
+										isFound = true
 										break
 									}
 								}
 								
+								if isFound == false {
+									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("HAS NO BOSS:"+ result[1])+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
+										log.Print(err)
+									}									
+								}
 								/*JsonData, err := json.Marshal(dbResult)
 								if err != nil {
 									log.Print(err)
@@ -273,12 +283,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println(string(JsonData))*/
 							}
 						}// ==Die
-					}// ==@BOSS
+					}// ==!BOSS
     
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"--"+ strconv.Itoa( time.Now().In(local).Hour() )+"-"+strconv.Itoa( time.Now().In(local).Minute() )+"-"+strconv.Itoa( time.Now().In(local).Second() ) )).Do(); err != nil {
-						log.Print(err)
-					}
-				}// ==@
+				}// ==!
 				
 				
 			
