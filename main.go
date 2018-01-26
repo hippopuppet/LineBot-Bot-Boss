@@ -189,26 +189,21 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if message.Text == "!STOP" {
-					
-					if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("STOP CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
-						log.Print(err)
-					}
-					
-				//doneChan <- true
-				}
-				/*if message.Text == "STOP" {
-					checkBossTimer.Stop()
-				}*/
-				 if message.Text == "!START" {
-					log.Print(event.Source.GroupID)
-					if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
-						log.Print(err)
-					}
-				}
+
 				 if string(message.Text[0]) == "!" {
 					result := strings.Split(message.Text," ")
-					log.Println("result[0]-"+result[0])
+					if message.Text == "!STOP" {
+						if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("STOP CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
+							log.Print(err)
+						}
+					//doneChan <- true
+					}
+					if message.Text == "!START" {
+						log.Print(event.Source.GroupID)
+						if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
+							log.Print(err)
+						}
+					}
 					if result[0] == "!BOSS" {
 						log.Println("result[2]-"+result[2])
 						if result[2] == "Die" {
@@ -333,7 +328,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				log.Println(info)
 			}
-			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID)).Do(); err != nil {
+			originalContentURL := "https://i.imgur.com/Qr2DKSG.jpg"
+			previewImageURL := "https://i.imgur.com/Qr2DKSG.jpg"
+			message := linebot.NewImageMessage(originalContentURL, previewImageURL)
+			if _, err = bot.ReplyMessage(event.ReplyToken, message).Do(); err != nil {
 					log.Print(err)
 			}
 		}
@@ -380,6 +378,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(info)
 			}
 		*/
+		originalContentURL := "https://i.imgur.com/Qr2DKSG.jpg"
+		previewImageURL := "https://i.imgur.com/Qr2DKSG.jpg"
+		message := linebot.NewImageMessage(originalContentURL, previewImageURL)
+		if _, err = bot.ReplyMessage(event.ReplyToken, message).Do(); err != nil {
+				log.Print(err)
+		}
 		}//
 	}
 
