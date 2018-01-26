@@ -177,7 +177,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								//}
 								//log.Println("UJetLag "+strconv.Itoa(JetLag))
 
-								if JetLag <= 10 ; JetLag > 0 {
+								if JetLag <= 10 && JetLag > 0 {
 									if groupID != ""{
 										if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
 											log.Print(err)
