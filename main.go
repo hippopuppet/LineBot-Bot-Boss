@@ -43,7 +43,7 @@ type BOSSINFO struct {
 type GROUPINFO struct {
     Id  string `bson:"id" json:"id"`
 	Type string `bson:"type" json:"type"`
-	Active string `bson:"active" json:"active"`
+	Active bool `bson:"active" json:"active"`
 }
 
 func convertTimetoMinute(orgTime int) int {
@@ -315,9 +315,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Optional. Switch the session to a monotonic behavior.
 			session.SetMode(mgo.Monotonic, true)
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-			// Update
+			// Upsert
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": false}}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": false}}
 			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
