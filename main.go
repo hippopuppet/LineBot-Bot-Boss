@@ -367,7 +367,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			if index <= 0 {
 				log.Println("index <= 0 ")
 				//upsertData := bson.M{"$set": bson.M{"GROUPINFO.id": event.Source.GroupID, "GROUPINFO.type": "group", "GROUPINFO.active":0}}
-				upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
+				upsertData := bson.M{"$push": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 				info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
 				if err != nil {
 					log.Println(err)
