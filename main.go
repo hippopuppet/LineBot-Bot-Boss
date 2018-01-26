@@ -362,19 +362,27 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
-			log.Println("dbResult")
-			log.Println(dbResult[0])
 			// Upsert
-			
-			//colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
-			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
-			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
-			info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
-			if err != nil {
-				log.Println(err)
+			index := len(dbResult[0].GroupInfo)
+			if index <= 0 {
+			log.Println("index <= 0 ")
+				upsertData := bson.M{"$set": bson.M{"GROUPINFO.id": event.Source.GroupID, "GROUPINFO.type": "group", "GROUPINFO.active":0}}
+				info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
+				if err != nil {
+					log.Println(err)
+				}
 			}
-			log.Println(info)
-
+			else{
+			log.Println("index > 0 ")
+				colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
+				upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
+				//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
+				info, err := c.UpsertId(colQuerier, upsertData)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Println(info)
+			}
 			
 		}
 	}
