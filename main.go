@@ -314,7 +314,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			
 			// Upsert
-			index := dbResult[1].GroupInfo.Counter()
+			index := len(dbResult[1].GroupInfo)
 			dbResult[1].GroupInfo[index].Id = event.Source.GroupID
 			dbResult[1].GroupInfo[index].Type = event.Source.Type
 			dbResult[1].GroupInfo[index].Active = 0
