@@ -312,9 +312,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
+			
 			// Upsert
+			index := dbResult[1].GroupInfo.Counter()
+			dbResult[1].GroupInfo[index].Id = event.Source.GroupID
+			dbResult[1].GroupInfo[index].Type = event.Source.Type
+			dbResult[1].GroupInfo[index].Active = 0
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.id": event.Source.GroupID, "GROUPINFO.type":event.Source.Type, "GROUPINFO.active": 0}}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": dbResult[1].GroupInfo[index].Id, "GROUPINFO.$.type":dbResult[1].GroupInfo[index].Type, "GROUPINFO.$.active": dbResult[1].GroupInfo[index].Active}}
 			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
 				log.Println(err)
