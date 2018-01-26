@@ -357,7 +357,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 
 			// Find
-			var dbResult []bson.M
+			var dbResult []JSONDATA
 			err = c.Find(nil).All(&dbResult)
 			if err != nil {
 				log.Println(err)
@@ -365,10 +365,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("dbResult")
 			log.Println(dbResult)
 			// Upsert
-			/*index := len(dbResult[0].GroupInfo)
+			index := len(dbResult[0].GroupInfo)
+			_cap := cap(dbResult[0].GroupInfo)
 			log.Print("index ...............   ")
 			log.Println(index)
-			if index == 0 {
+			log.Print("_cap ...............   ")
+			log.Println(_cap)
+			/*if index == 0 {
 				dbResult[0].GroupInfo := make([]GROUPINFO, 1)
 				dbResult[0].GroupInfo[0] := GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
 				err := c.Insert(&dbResult[0].GroupInfo)
