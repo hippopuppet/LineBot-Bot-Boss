@@ -346,11 +346,35 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeFollow {
-			userID = event.Source.UserID
-			//groupID := event.Source.GroupID
-			if _, err := bot.PushMessage(userID, linebot.NewTextMessage("UserID:"+userID)).Do(); err != nil {
-				log.Print(err)
+			
+
+			//[CONNECT DB]
+			session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+			if err != nil {
+				panic(err)
 			}
+			defer session.Close()
+			// Optional. Switch the session to a monotonic behavior.
+			session.SetMode(mgo.Monotonic, true)
+			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+			
+			var dbResult []JSONDATA
+			err = c.Find(nil).All(&dbResult)
+			if err != nil {
+				log.Println(err)
+			}
+			// Upsert
+			index := len(dbResult[0].GroupInfo)
+			log.Print("index ...............   ")
+			log.Println(index)
+			
+			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$index.id": event.Source.GroupID, "GROUPINFO.$index.type": "group", "GROUPINFO.$index.active":0}}
+			info, err := c.Upsert(colQuerier, change)
+			if err != nil {
+				log.Println(err)
+			}
+			log.Println(info)
 		}
 	}
 
