@@ -372,14 +372,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			if index == 0 {
 				data := GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}
 				dbResult[0].GroupInfo =  append(dbResult[0].GroupInfo, data)
-				_cap := cap(dbResult[0].GroupInfo)
+				/*_cap := cap(dbResult[0].GroupInfo)
 				log.Print("_cap ...............   ")
-				log.Println(_cap)
-				/*dbResult[0].GroupInfo[0] := GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
+				log.Println(_cap)*/
+				//dbResult[0].GroupInfo[0] := GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
 				err := c.Insert(&dbResult[0].GroupInfo)
 				if err != nil {
 					log.Println(err)
-				}*/
+				}
 			}
 			/*colQuerier := bson.M{"GROUPINFO.id": event.Source.UserID}
 			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
