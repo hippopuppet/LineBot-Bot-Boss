@@ -357,7 +357,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 
 			// Find
-			/*var dbResult []JSONDATA
+			var dbResult []JSONDATA
 			err = c.Find(nil).All(&dbResult)
 			if err != nil {
 				log.Println(err)
@@ -365,17 +365,21 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Upsert
 			index := len(dbResult[0].GroupInfo)
 			log.Print("index ...............   ")
-			log.Println(index)*/
-			upsertData := JSONDATA{}
-			upsertData.GroupInfo := []GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
-			
-			colQuerier := bson.M{"GROUPINFO.id": event.Source.UserID}
+			log.Println(index)
+			if index == 0 {
+				dbResult[0].GroupInfo := []GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
+				err := c.Insert(dbResult[0].GroupInfo)
+				if err != nil {
+					log.Println(err)
+				}
+			}
+			/*colQuerier := bson.M{"GROUPINFO.id": event.Source.UserID}
 			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 			info, err := c.Upsert(colQuerier, &upsertData)
 			if err != nil {
 				log.Println(err)
 			}
-			log.Println(info)
+			log.Println(info)*/
 		}
 	}
 
