@@ -128,6 +128,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					checkBossTimer.Stop()
 				}*/
 				 if message.Text == "START" {
+					log.Println("START CALL ATTENTION TO BOSS RESURRECTION !! ")
 					checkBossTimer := time.NewTicker(time.Second*60).C
 					if groupID != ""{
 						if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
@@ -138,7 +139,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						for {
 						select {
 							case <- checkBossTimer:
-								log.Println("START CALL ATTENTION TO BOSS RESURRECTION !! ")
+								log.Println("CHECK BOSS RESURRECTION !! ")
 								NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 								log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 
