@@ -232,7 +232,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								var dbResult []JSONDATA
 								err = c.Find(nil).All(&dbResult)
 								if err != nil {
-								   log.Fatal(err)
+								   log.Println(err)
 								}
 								isFound := false
 								for i, _ := range dbResult[0].BossInfo {
@@ -315,23 +315,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Optional. Switch the session to a monotonic behavior.
 			session.SetMode(mgo.Monotonic, true)
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-			//Find
-			var dbResult bson.M
-			err = c.Find(bson.M{"GROUPINFO.id": event.Source.GroupID}).One(&dbResult)
+			// Upsert
+			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type":event.Source.Type, "GROUPINFO.$.active": 0}}
+			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
+			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
-				panic(err)
+				Println(err)
 			}
-			log.Print("dbResult")
-			log.Println(dbResult)
-			/*if dbResult 
-			// Insert
-			insetData := bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": 0}
-			err := c.Insert(insetData)
-			if err != nil {
-				panic(err)
-			}
-			*/
-			
+			log.Print(info)
 			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID)).Do(); err != nil {
 					log.Print(err)
 			}
