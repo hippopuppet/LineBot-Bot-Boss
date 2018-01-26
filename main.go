@@ -369,7 +369,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print("index ...............   ")
 			log.Println(index)*/
 			var upsertData []JSONDATA
-			upsertData[0].GroupInfo := make([]GROUPINFO, 1)
+			upsertData[0].GroupInfo := []GROUPINFO
 			upsertData[0].GroupInfo[0].id = event.Source.UserID
 			upsertData[0].GroupInfo[0].Type := "group"
 			upsertData[0].GroupInfo[0].Active := 0
