@@ -370,7 +370,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(index)
 			
 			if index == 0 {
-				data := GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
+				data := GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}
 				dbResult[0].GroupInfo =  append(dbResult[0].GroupInfo, data)
 				_cap := cap(dbResult[0].GroupInfo)
 				log.Print("_cap ...............   ")
