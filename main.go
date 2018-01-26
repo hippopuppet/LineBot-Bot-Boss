@@ -256,15 +256,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										
 										dbResult[0].BossInfo[i].Resurrection = strNewDieTime
 										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
-										/*
-										var dbM []bson.M
-										err = c.Find(nil).All(&dbM)
-										if err != nil {
-										   log.Fatal(err)
-										}
-										//log.Println("dbM ...")
-										//log.Println(dbM)
-										*/
+										
 										// Update
 										colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
 										change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
@@ -315,6 +307,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Optional. Switch the session to a monotonic behavior.
 			session.SetMode(mgo.Monotonic, true)
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+			var dbResult []JSONDATA
+			err = c.Find(nil).All(&dbResult)
+			if err != nil {
+				log.Println(err)
+			}
+			// Upsert
+			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
+			change := bson.M{"$set": bson.M{"GROUPINFO.id": event.Source.GroupID, "GROUPINFO.type":event.Source.Type, "GROUPINFO.active": 0}}
+			info, err := c.Upsert(colQuerier, change)
+			if err != nil {
+				log.Println(err)
+			}
+			log.Println(info)
+			/*
 			// Find
 			var dbResult bson.M
 			err = c.Find(bson.M{"GROUPINFO.id": event.Source.GroupID}).One(&dbResult)
@@ -328,7 +334,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 			}
-
+			*/
 			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID)).Do(); err != nil {
 					log.Print(err)
 			}
