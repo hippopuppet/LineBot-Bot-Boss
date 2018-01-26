@@ -366,7 +366,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			index := len(dbResult[0].GroupInfo)
 			log.Print("index ...............   ")
 			log.Println(index)*/
-			var upsertData JSONDATA{}
+			upsertData := JSONDATA{}
 			upsertData.GroupInfo := []GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}
 			
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.UserID}
