@@ -357,7 +357,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 
 			// Find
-			var dbResult []dson.M
+			var dbResult []bson.M
 			err = c.Find(nil).All(&dbResult)
 			if err != nil {
 				log.Println(err)
