@@ -172,12 +172,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 								JetLag := NOWTIME - ResurrectionA
 								//log.Println("JetLag "+strconv.Itoa(JetLag))
-								if JetLag < 0 {
-									JetLag = -JetLag
-								}
+								//if JetLag < 0 {
+								//	JetLag = -JetLag
+								//}
 								//log.Println("UJetLag "+strconv.Itoa(JetLag))
 
-								if JetLag <= 10 {
+								if JetLag <= 10 ; JetLag > 0 {
 									if groupID != ""{
 										if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
 											log.Print(err)
