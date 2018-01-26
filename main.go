@@ -49,8 +49,9 @@ func convertTimetoMinute(orgTime int) int {
 
 func convertMinutetoTime(orgMinute int) int {
 	H := orgMinute/60
+	HH : = H%24
 	M := orgMinute%60
-	T := (H*100)+M
+	T := (HH*100)+M
 	
 	return T
 }
