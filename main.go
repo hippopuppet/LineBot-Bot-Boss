@@ -369,10 +369,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print("index ...............   ")
 			log.Println(index)*/
 			usertData := JSONDATA{}
-			usertData.GroupInfo := make(GROUPINFO{},len(GROUPINFO))
-			usertData.GroupInfo.id = event.Source.GroupID
-			usertData.GroupInfo.Type := "group"
-			usertData.GroupInfo.Active := 0
+			usertData.GroupInfo := make([]GROUPINFO, 1)
+			usertData.GroupInfo[0].id = event.Source.GroupID
+			usertData.GroupInfo[0].Type := "group"
+			usertData.GroupInfo[0].Active := 0
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
 			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 			info, err := c.Upsert(colQuerier, &usertData)
