@@ -319,11 +319,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
 			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": false}}
 			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
-			err = c.Upsert(colQuerier, change)
+			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
 				panic(err)
 			}
-
+			log.Print(info)
 			/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("GroupID"+groupID)).Do(); err != nil {
 					log.Print(err)
 			}*/
