@@ -317,7 +317,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 			// Find
 			var dbResult bson.M
-			err := c.Find(bson.M{"name": "Tom"}).One(&dbResult)
+			err = c.Find(bson.M{"name": "Tom"}).One(&dbResult)
 			if err != nil {
 				if err == mgo.ErrNotFound {
 					//Insert
