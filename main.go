@@ -317,7 +317,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
 			// Update
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": 0}}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": false}}
 			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
