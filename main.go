@@ -346,8 +346,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeFollow {
-			
-
 			//[CONNECT DB]
 			session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
 			if err != nil {
@@ -368,9 +366,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			index := len(dbResult[0].GroupInfo)
 			log.Print("index ...............   ")
 			log.Println(index)*/
-			colQuerier := bson.M{"GROUPINFO.$.id": event.Source.UserID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
-			info, err := c.Upsert(colQuerier, change)
+			var upsertData JSONDATA{}
+			upsertData.GroupInfo := []GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}
+			
+			colQuerier := bson.M{"GROUPINFO.id": event.Source.UserID}
+			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
+			info, err := c.Upsert(colQuerier, &usertData)
 			if err != nil {
 				log.Println(err)
 			}
