@@ -365,42 +365,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("dbResult")
 			log.Println(dbResult[0])
 			// Upsert
-			index := len(dbResult[0].GroupInfo)
-			//log.Print("index ...............   ")
-			//log.Println(index)
-			if index == 0 {
-				data := GROUPINFO{Id: event.Source.UserID, Type: "user", Active: 0}
-				dbResult[0].GroupInfo =  append(dbResult[0].GroupInfo, data)
-				/*_cap := cap(dbResult[0].GroupInfo)
-				log.Print("_cap ...............   ")
-				log.Println(_cap)*/
-				//dbResult[0].GroupInfo[0] := GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
-				//err := c.Insert(&JSONDATA{ GroupInfo: []GROUPINFO{GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}}, })
-				/*if err != nil {
-					log.Println(err)
-				}*/
-				for i, _ := range dbResult[0].GroupInfo {
-				dbResult[0].GroupInfo[i].Id =  event.Source.UserID
-				dbResult[0].GroupInfo[i].Type = "user"
-				dbResult[0].GroupInfo[i].Active = 0
-				//colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
-				upsertData := bson.M{"$set": bson.M{"GROUPINFO":  bson.M{"id": dbResult[0].GroupInfo[i].Id, "type": dbResult[0].GroupInfo[i].Type, "active":dbResult[0].GroupInfo[i].Active}}}
-				info, err := c.UpsertId( bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
-				if err != nil {
-					log.Println(err)
-				}
-				log.Println(info)
-				}
-
-			}
-			/*colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
-			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
-			upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
-			info, err := c.Upsert(colQuerier, upsertData)
+			
+			//colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
+			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
+			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
+			info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
 			if err != nil {
 				log.Println(err)
 			}
-			log.Println(info)*/
+			log.Println(info)
 
 			
 		}
