@@ -321,7 +321,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
-				Println(err)
+				log.Println(err)
 			}
 			log.Print(info)
 			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID)).Do(); err != nil {
