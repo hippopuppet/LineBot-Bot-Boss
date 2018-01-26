@@ -380,14 +380,18 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			//		log.Println(err)
 			//	}
 			//}
-			colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
+			/*colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
 			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 			upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
 			info, err := c.Upsert(colQuerier, upsertData)
 			if err != nil {
 				log.Println(err)
 			}
-			log.Println(info)
+			log.Println(info)*/
+
+			for i, _ := range dbResult[0].GroupInfo {
+				log.Println("for i, _ := range dbResult[0].GroupInfo")
+			}
 		}
 	}
 
