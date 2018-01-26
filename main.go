@@ -365,21 +365,31 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("dbResult")
 			log.Println(dbResult)
 			// Upsert
-			//index := len(dbResult[0].GroupInfo)
+			index := len(dbResult[0].GroupInfo)
 			//log.Print("index ...............   ")
 			//log.Println(index)
-			//if index == 0 {
-				//data := GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}
-				//dbResult[0].GroupInfo =  append(dbResult[0].GroupInfo, data)
+			if index == 0 {
+				data := GROUPINFO{Id: event.Source.UserID, Type: "user", Active: 0}
+				dbResult[0].GroupInfo =  append(dbResult[0].GroupInfo, data)
 				/*_cap := cap(dbResult[0].GroupInfo)
 				log.Print("_cap ...............   ")
 				log.Println(_cap)*/
 				//dbResult[0].GroupInfo[0] := GROUPINFO{"id": event.Source.UserID, "type": "group", "active": 0}
-			//	err := c.Insert(&JSONDATA{ GroupInfo: []GROUPINFO{GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}}, })
-			//	if err != nil {
-			//		log.Println(err)
-			//	}
-			//}
+				//err := c.Insert(&JSONDATA{ GroupInfo: []GROUPINFO{GROUPINFO{Id: event.Source.UserID, Type: "group", Active: 0}}, })
+				/*if err != nil {
+					log.Println(err)
+				}*/
+				for i, _ := range dbResult[0].GroupInfo {
+				colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
+				upsertData := bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}
+				info, err := c.Upsert(colQuerier, upsertData)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Println(info)
+				}
+
+			}
 			/*colQuerier := bson.M{"GROUPINFO": bson.M{ "id" : event.Source.UserID}}
 			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 			upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
@@ -389,12 +399,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			log.Println(info)*/
 
-			for i, _ := range dbResult[0].GroupInfo {
-			 if i == 0 {
-			 
-			 }
-				log.Println("for i, _ := range dbResult[0].GroupInfo")
-			}
+			
 		}
 	}
 
