@@ -30,6 +30,7 @@ import (
 
 type JSONDATA struct {
     BossInfo []BOSSINFO `bson:"BOSSINFO" json:"BOSSINFO"`
+	GroupInfo []GROUPINFO `bson:"GROUPINFO" json:"GROUPINFO"`
 }
 
 type BOSSINFO struct {
@@ -37,6 +38,12 @@ type BOSSINFO struct {
 	RefreshTick string `bson:"refreshtick" json:"refreshtick"`
 	Die string `bson:"die" json:"die"`
     Resurrection string `bson:"resurrection" json:"resurrection"`
+}
+
+type GROUPINFO struct {
+    Id  string `bson:"id" json:"id"`
+	Type string `bson:"type" json:"type"`
+	Active string `bson:"active" json:"active"`
 }
 
 func convertTimetoMinute(orgTime int) int {
@@ -185,7 +192,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 											log.Print(err)
 										}
 									}
-									
+									if userID != ""{
+										if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
+											log.Print(err)
+										}
+									}
 								}
 							}
 
@@ -295,11 +306,27 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeJoin {
-			//userID := event.Source.UserID
-			groupID = event.Source.GroupID
-			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("GroupID"+groupID)).Do(); err != nil {
-					log.Print(err)
+			//[CONNECT DB]
+			session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+			if err != nil {
+				panic(err)
 			}
+			defer session.Close()
+			// Optional. Switch the session to a monotonic behavior.
+			session.SetMode(mgo.Monotonic, true)
+			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+			// Update
+			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "GROUP", "GROUPINFO.$.active": false}}
+			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
+			err = c.Upsert(colQuerier, change)
+			if err != nil {
+				panic(err)
+			}
+
+			/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("GroupID"+groupID)).Do(); err != nil {
+					log.Print(err)
+			}*/
 		}
 
 		if event.Type == linebot.EventTypeFollow {
