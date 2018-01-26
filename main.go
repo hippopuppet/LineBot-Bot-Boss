@@ -324,9 +324,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				panic(err)
 			}
 			log.Print(info)
-			/*if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("GroupID"+groupID)).Do(); err != nil {
+			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID).Do(); err != nil {
 					log.Print(err)
-			}*/
+			}
 		}
 
 		if event.Type == linebot.EventTypeFollow {
