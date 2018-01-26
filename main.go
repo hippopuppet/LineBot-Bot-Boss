@@ -307,22 +307,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Optional. Switch the session to a monotonic behavior.
 			session.SetMode(mgo.Monotonic, true)
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+			
 			var dbResult []JSONDATA
 			err = c.Find(nil).All(&dbResult)
 			if err != nil {
 				log.Println(err)
 			}
-			
 			// Upsert
-			index := len(dbResult[1].GroupInfo)
+			index := len(dbResult[0].GroupInfo)
 			log.Print("index ...............   ")
 			log.Println(index)
 
-			dbResult[1].GroupInfo[index].Id = event.Source.GroupID
-			dbResult[1].GroupInfo[index].Type = "group"
-			dbResult[1].GroupInfo[index].Active = 0
+			dbResult[0].GroupInfo[index].Id = event.Source.GroupID
+			dbResult[0].GroupInfo[index].Type = "group"
+			dbResult[0].GroupInfo[index].Active = 0
 			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": dbResult[1].GroupInfo[index].Id, "GROUPINFO.$.type":dbResult[1].GroupInfo[index].Type, "GROUPINFO.$.active": dbResult[1].GroupInfo[index].Active}}
+			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": dbResult[0].GroupInfo[index].Id, "GROUPINFO.$.type":dbResult[0].GroupInfo[index].Type, "GROUPINFO.$.active": dbResult[0].GroupInfo[index].Active}}
 			info, err := c.Upsert(colQuerier, change)
 			if err != nil {
 				log.Println(err)
