@@ -390,6 +390,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(info)*/
 
 			for i, _ := range dbResult[0].GroupInfo {
+			 if i == 0 {
+			 
+			 }
 				log.Println("for i, _ := range dbResult[0].GroupInfo")
 			}
 		}
