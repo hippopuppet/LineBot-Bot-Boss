@@ -97,6 +97,9 @@ var checkBossTimer time.Ticker
 
 func main() {
 	checkBossTimer := time.NewTicker(time.Second*60).C
+	var local *time.Location
+	local, ok := time.LoadLocation("Asia/Taipei")
+	log.Print(ok)
 	go func() {
 		for {
 		select {
@@ -183,9 +186,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	for _, event := range events {
 		
 		if event.Type == linebot.EventTypeMessage {
-			var local *time.Location
-			local, ok := time.LoadLocation("Asia/Taipei")
-			log.Print(ok)
+			
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				if message.Text == "!STOP" {
