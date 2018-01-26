@@ -370,10 +370,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(index)*/
 			usertData := JSONDATA{}
 			usertData.GroupInfo[0] := make(GROUPINFO, len(GROUPINFO))
-			usertData.GroupInfo[0].id = event.Source.GroupID
+			usertData.GroupInfo[0].id = event.Source.UserID
 			usertData.GroupInfo[0].Type := "group"
 			usertData.GroupInfo[0].Active := 0
-			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
+			colQuerier := bson.M{"GROUPINFO.id": event.Source.UserID}
 			//change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 			info, err := c.Upsert(colQuerier, &usertData)
 			if err != nil {
