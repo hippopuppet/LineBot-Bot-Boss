@@ -138,11 +138,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						for {
 						select {
 							case <- checkBossTimer:
-								log.Println("checkBossTimer expired")
+								log.Println("START CALL ATTENTION TO BOSS RESURRECTION !! ")
 								NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 								log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 
-								log.Println("CONNECT DB....")
+								//log.Println("CONNECT DB....")
 								//[CONNECT DB]
 								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
 								if err != nil {
@@ -154,7 +154,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								session.SetMode(mgo.Monotonic, true)
 
 								c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-								log.Println("find data...")
+								//log.Println("find data...")
 								var dbResult []JSONDATA
 								err = c.Find(nil).All(&dbResult)
 								if err != nil {
@@ -162,20 +162,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								}
 								
 								for _, bossinfo := range dbResult[0].BossInfo {
-								log.Println("bossinfo.Resurrection "+bossinfo.Resurrection)
+								//log.Println("bossinfo.Resurrection "+bossinfo.Resurrection)
 								bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
 								if err != nil {
 									log.Print(err)
 								}
 								ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
-								log.Println("ResurrectionA "+strconv.Itoa(ResurrectionA))
+								//log.Println("ResurrectionA "+strconv.Itoa(ResurrectionA))
 
 								JetLag := NOWTIME - ResurrectionA
-								log.Println("JetLag "+strconv.Itoa(JetLag))
+								//log.Println("JetLag "+strconv.Itoa(JetLag))
 								if JetLag < 0 {
 									JetLag = -JetLag
 								}
-								log.Println("UJetLag "+strconv.Itoa(JetLag))
+								//log.Println("UJetLag "+strconv.Itoa(JetLag))
 
 								if JetLag <= 10 {
 									if groupID != ""{
