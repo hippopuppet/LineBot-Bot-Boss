@@ -384,7 +384,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				dbResult[0].GroupInfo[i].Type = "user"
 				dbResult[0].GroupInfo[i].Active = 0
 				colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
-				upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": dbResult[0].GroupInfo[i].Id, "GROUPINFO.$.type": dbResult[0].GroupInfo[i].Type, "GROUPINFO.$.active":dbResult[0].GroupInfo[i].Active}}
+				upsertData := bson.M{"$set": bson.M{"GROUPINFO":  bson.M{"id": dbResult[0].GroupInfo[i].Id, "type": dbResult[0].GroupInfo[i].Type, "active":dbResult[0].GroupInfo[i].Active}}}
 				info, err := c.UpsertId(bson.M{"_id": "5a69aa488d0d213fd88abd95"}, upsertData)
 				if err != nil {
 					log.Println(err)
