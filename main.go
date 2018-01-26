@@ -96,6 +96,70 @@ var doneChan = make(chan bool)
 var checkBossTimer time.Ticker
 
 func main() {
+	checkBossTimer := time.NewTicker(time.Second*60).C
+	go func() {
+		for {
+		select {
+			case <- checkBossTimer:
+				log.Println("CHECK BOSS RESURRECTION !! ")
+				NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
+				log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
+
+				//log.Println("CONNECT DB....")
+				//[CONNECT DB]
+				session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+				if err != nil {
+					panic(err)
+				}
+				defer session.Close()
+
+				// Optional. Switch the session to a monotonic behavior.
+				session.SetMode(mgo.Monotonic, true)
+
+				c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+				//log.Println("find data...")
+				var dbResult []JSONDATA
+				err = c.Find(nil).All(&dbResult)
+				if err != nil {
+					log.Fatal(err)
+				}
+								
+				for _, bossinfo := range dbResult[0].BossInfo {
+					//log.Println("bossinfo.Resurrection "+bossinfo.Resurrection)
+					bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
+					if err != nil {
+						log.Print(err)
+					}
+					ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
+					//log.Println("ResurrectionA "+strconv.Itoa(ResurrectionA))
+
+					JetLag := NOWTIME - ResurrectionA
+					//log.Println("JetLag "+strconv.Itoa(JetLag))
+					//if JetLag < 0 {
+					//	JetLag = -JetLag
+					//}
+					//log.Println("UJetLag "+strconv.Itoa(JetLag))
+
+					if JetLag <= 10 && JetLag > 0 {
+						if groupID != ""{
+							if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
+								log.Print(err)
+							}
+						}
+						if userID != ""{
+							if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
+								log.Print(err)
+							}
+						}
+					}
+				}	
+			case <- doneChan:
+				log.Println("Done")
+				return
+			}
+		}
+	}()
+
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
@@ -124,89 +188,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			log.Print(ok)
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if message.Text == "STOP" {
-					if groupID != ""{
-						if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("STOP CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
-							log.Print(err)
-						}
+				if message.Text == "!STOP" {
+					
+					if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("STOP CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
+						log.Print(err)
 					}
-					doneChan <- true
+					
+				//doneChan <- true
 				}
 				/*if message.Text == "STOP" {
 					checkBossTimer.Stop()
 				}*/
-				 if message.Text == "START" {
-					log.Println("START CALL ATTENTION TO BOSS RESURRECTION !! ")
-					checkBossTimer := time.NewTicker(time.Second*60).C
-					if groupID != ""{
-						if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
-							log.Print(err)
-						}
+				 if message.Text == "!START" {
+					log.Print(event.Source.GroupID)
+					if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
+						log.Print(err)
 					}
-					go func() {
-						for {
-						select {
-							case <- checkBossTimer:
-								log.Println("CHECK BOSS RESURRECTION !! ")
-								NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
-								log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
-
-								//log.Println("CONNECT DB....")
-								//[CONNECT DB]
-								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
-								if err != nil {
-								   panic(err)
-								}
-								defer session.Close()
-
-								// Optional. Switch the session to a monotonic behavior.
-								session.SetMode(mgo.Monotonic, true)
-
-								c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-								//log.Println("find data...")
-								var dbResult []JSONDATA
-								err = c.Find(nil).All(&dbResult)
-								if err != nil {
-								   log.Fatal(err)
-								}
-								
-								for _, bossinfo := range dbResult[0].BossInfo {
-								//log.Println("bossinfo.Resurrection "+bossinfo.Resurrection)
-								bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
-								if err != nil {
-									log.Print(err)
-								}
-								ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
-								//log.Println("ResurrectionA "+strconv.Itoa(ResurrectionA))
-
-								JetLag := NOWTIME - ResurrectionA
-								//log.Println("JetLag "+strconv.Itoa(JetLag))
-								//if JetLag < 0 {
-								//	JetLag = -JetLag
-								//}
-								//log.Println("UJetLag "+strconv.Itoa(JetLag))
-
-								if JetLag <= 10 && JetLag > 0 {
-									if groupID != ""{
-										if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
-											log.Print(err)
-										}
-									}
-									if userID != ""{
-										if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
-											log.Print(err)
-										}
-									}
-								}
-							}
-
-								
-							case <- doneChan:
-								log.Println("Done")
-								return
-							}
-						}
-					}()
 				}
 				 if string(message.Text[0]) == "!" {
 					result := strings.Split(message.Text," ")
@@ -307,45 +304,41 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Optional. Switch the session to a monotonic behavior.
 			session.SetMode(mgo.Monotonic, true)
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-			
+
+			// Find
 			var dbResult []JSONDATA
 			err = c.Find(nil).All(&dbResult)
 			if err != nil {
 				log.Println(err)
 			}
 			// Upsert
-			/*index := len(dbResult[0].GroupInfo)
-			log.Print("index ...............   ")
-			log.Println(index)
-			
-			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.$index.id": event.Source.GroupID, "GROUPINFO.$index.type": "group", "GROUPINFO.$index.active":0}}
-			info, err := c.Upsert(colQuerier, change)
-			if err != nil {
-				log.Println(err)
-			}
-			log.Println(info)*/
-			/*
-			// Find
-			var dbResult bson.M
-			err = c.Find(bson.M{"GROUPINFO.id": event.Source.GroupID}).One(&dbResult)
-			if err != nil {
-				if err == mgo.ErrNotFound {
-					//Insert
-					insertData := bson.M{"GROUPINFO.id": event.Source.GroupID, "GROUPINFO.type":event.Source.Type, "GROUPINFO.active": 0}
-					err = c.Insert(insertData)
-					if err != nil {
-						panic(err)
-					}
+			index := len(dbResult[0].GroupInfo)
+			if index <= 0 {
+				log.Println("index <= 0 ")
+				upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "group", "active":0}}}
+				info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
+				if err != nil {
+					log.Println(err)
 				}
+				log.Println(info)
 			}
-			*/
+			if index > 0 {
+				log.Println("index > 0 ")
+				colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
+				upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
+				info, err := c.Upsert(colQuerier, upsertData)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Println(info)
+			}
 			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID)).Do(); err != nil {
 					log.Print(err)
 			}
 		}
 
 		if event.Type == linebot.EventTypeFollow {
+		/*
 			//[CONNECT DB]
 			session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
 			if err != nil {
@@ -385,7 +378,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				log.Println(info)
 			}
-			
+		*/
 		}//
 	}
 
