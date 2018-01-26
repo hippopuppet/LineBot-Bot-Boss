@@ -271,7 +271,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 										err = c.Update(colQuerier, change)
 										if err != nil {
-											panic(err)
+											log.Println(err)
 										}
 										if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")).Do(); err != nil {
 											log.Print(err)
@@ -315,15 +315,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			// Optional. Switch the session to a monotonic behavior.
 			session.SetMode(mgo.Monotonic, true)
 			c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-			// Upsert
-			colQuerier := bson.M{"GROUPINFO.id": event.Source.GroupID}
-			change := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type":event.Source.Type, "GROUPINFO.$.active": 0}}
-			//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
-			info, err := c.Upsert(colQuerier, change)
+			// Find
+			var dbResult bson.M
+			err := c.Find(bson.M{"name": "Tom"}).One(&dbResult)
 			if err != nil {
-				log.Println(err)
+				if err == mgo.ErrNotFound {
+					//Insert
+					insertData := bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type":event.Source.Type, "GROUPINFO.$.active": 0}
+					err = c.Insert(insertData)
+					if err != nil {
+						panic(err)
+					}
+				}
 			}
-			log.Print(info)
+
 			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(event.Source.GroupID)).Do(); err != nil {
 					log.Print(err)
 			}
