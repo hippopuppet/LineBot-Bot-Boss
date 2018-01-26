@@ -368,7 +368,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			index := len(dbResult[0].GroupInfo)
 			log.Print("index ...............   ")
 			log.Println(index)*/
-			usertData := JSONDATA{}
+			var usertData []JSONDATA
 			usertData.GroupInfo := make([]GROUPINFO, 1)
 			usertData.GroupInfo[0].id = event.Source.GroupID
 			usertData.GroupInfo[0].Type := "group"
