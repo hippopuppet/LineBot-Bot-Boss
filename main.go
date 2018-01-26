@@ -373,7 +373,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				log.Println(info)
 			}
-			else{
+			
 				log.Println("index > 0 ")
 				colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
 				upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
@@ -383,7 +383,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println(err)
 				}
 				log.Println(info)
-			}
+			
 			
 		}//
 	}
