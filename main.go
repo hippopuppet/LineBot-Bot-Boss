@@ -315,6 +315,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			
 			// Upsert
 			index := len(dbResult[1].GroupInfo)
+			log.Print("index ...............   ")
+			log.Println(index)
+
 			dbResult[1].GroupInfo[index].Id = event.Source.GroupID
 			dbResult[1].GroupInfo[index].Type = "group"
 			dbResult[1].GroupInfo[index].Active = 0
