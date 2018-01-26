@@ -363,7 +363,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			log.Println("dbResult")
-			log.Println(dbResult)
+			log.Println(dbResult[0])
 			// Upsert
 			index := len(dbResult[0].GroupInfo)
 			//log.Print("index ...............   ")
