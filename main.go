@@ -67,9 +67,7 @@ type AIRINFO struct {
 	WindDirec string `bson:"WindDirec" json:"WindDirec"`
 	WindSpeed string `bson:"WindSpeed" json:"WindSpeed"`
 }
-type Foo struct {
-    Bar string
-}
+
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
 	M := orgTime - (H*100)
@@ -101,7 +99,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getAirJson(target interface{}) error {
+func getAirJson(target AIRINFO) error {
 	var myClient = &http.Client{Timeout: 10 * time.Second}
     r, err := myClient.Get("http://opendata2.epa.gov.tw/AQI.json")
     if err != nil {
@@ -109,8 +107,8 @@ func getAirJson(target interface{}) error {
     }
     defer r.Body.Close()
 	log.Println("r.Body")
-	log.Println(r.Body)
-    return json.NewDecoder(r.Body).Decode(target)
+	log.Println(&r.Body)
+    return json.NewDecoder(r.Body).Decode(&target)
    /*raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
     if err != nil {
         log.Println(err.Error())
@@ -365,9 +363,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if message.Text == "!PM" {
-						airJson := Foo{}
-						getAirJson(&airJson)
-						log.Println(airJson.Bar)
+						airJson := AIRINFO{}
+						getAirJson(airJson)
+						log.Println(airJson)
 					}
 
     
