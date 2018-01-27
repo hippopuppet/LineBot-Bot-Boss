@@ -99,7 +99,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getJson(url string) interface {
+func getJson(url string ) JSONDATA {
    raw, err := ioutil.ReadFile(url) 
    //"http://opendata2.epa.gov.tw/AQX.json"
     if err != nil {
