@@ -374,7 +374,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}//!LIST
 					if message.Text == "!PM" {
 						var airJson []AIRINFO
-						getAirJson(airJson)
+						getAirJson(&airJson)
 						log.Println(airJson)
 					}
 
