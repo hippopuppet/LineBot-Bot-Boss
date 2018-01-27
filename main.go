@@ -100,11 +100,12 @@ func toJson(p interface{}) string {
 }
 
 func getAirJson(target interface{}) error {
-	resp, err := http.Get("http://opendata2.epa.gov.tw/AQI.json")
+	url := "http://opendata2.epa.gov.tw/AQI.json"
+	resp, err := http.Get(url)
     if err != nil {
         return fmt.Errorf("cannot fetch URL %q: %v", url, err)
     }
-    defer r.Body.Close()
+    defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
         return fmt.Errorf("unexpected http GET status: %s", resp.Status)
