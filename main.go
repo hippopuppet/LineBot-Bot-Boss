@@ -371,8 +371,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if result[0] == "!PM" {
-						if result[1] != ""
-						{
+						if result[1] != "" {
 							var airJson []AIRINFO
 							getAirJson(&airJson)
 							log.Println(airJson)
@@ -390,8 +389,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									}
 								}
 							}
-						}
-						
+						}						
 					}//!PM
 
     
