@@ -357,13 +357,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			// Upsert
 			colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
-			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
+			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
 			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
 			info, err := c.Upsert(colQuerier, upsertData)
 			if err != nil {
 				log.Println(err)
 				//if err == mgp.findAndModifyFailed {
-					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "user", "active":0}}}
+					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "group", "active":0}}}
 					info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
 					if err != nil {
 						log.Println(err)
