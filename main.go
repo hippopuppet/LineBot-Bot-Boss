@@ -208,9 +208,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 					if result[0] == "!BOSS" {
-						log.Println("result[2]-"+result[2])
 						if result[2] == "Die" {
-							log.Println("result[3]-"+result[3])
 							if result[3] != "" {
 								log.Println("CONNECT DB....")
 								//[CONNECT DB]
@@ -219,7 +217,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								   panic(err)
 								}
 								defer session.Close()
-
 								// Optional. Switch the session to a monotonic behavior.
 								session.SetMode(mgo.Monotonic, true)
 
@@ -232,10 +229,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								}
 								isFound := false
 								for i, _ := range dbResult[0].BossInfo {
-									log.Println("p.KingOfName-"+dbResult[0].BossInfo[i].KingOfName)
-									log.Println("compare ...."+ result[1])
-									if result[1] == dbResult[0].BossInfo[i].KingOfName {
-										log.Println("assiagn die time ...."+ dbResult[0].BossInfo[i].Die)
+									if result[1] == dbResult[0].BossInfo[i].KingOfName {										
 										dbResult[0].BossInfo[i].Die = result[3]
 										intNewDie, err := strconv.Atoi(result[3])
 										if err != nil {
@@ -247,12 +241,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 											log.Print(err)
 										}
 										intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
-
-										strNewDieTime := strconv.Itoa(intNewDieTime)
-										
-										dbResult[0].BossInfo[i].Resurrection = strNewDieTime
-										log.Println("calaculate resurrection .... "+ dbResult[0].BossInfo[i].Resurrection)
-										
+										strNewDieTime := strconv.Itoa(intNewDieTime)										
+										dbResult[0].BossInfo[i].Resurrection = strNewDieTime										
 										// Update
 										colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
 										change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
@@ -283,6 +273,37 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							}
 						}// ==Die
 					}// ==!BOSS
+					if message.Text == "!LIST" {
+						//[CONNECT DB]
+						session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+						if err != nil {
+							panic(err)
+						}
+						defer session.Close()
+
+						// Optional. Switch the session to a monotonic behavior.
+						session.SetMode(mgo.Monotonic, true)
+
+						c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+						var dbResult []JSONDATA
+						err = c.Find(nil).All(&dbResult)
+						if err != nil {
+							log.Fatal(err)
+						}
+						var list_buf bytes.Buffer
+						for i, bossinfo := range dbResult[0].BossInfo {
+							list_buf.WriteString(strconv.Itoa(i))
+							list_buf.WriteString(". ")
+							list_buf.WriteString(bossinfo.KingOfName)
+							list_buf.WriteString(" : ")
+							list_buf.WriteString(bossinfo.Resurrection)
+							list_buf.WriteString("\n")							
+						}
+     
+						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf)).Do(); err != nil {
+							log.Print(err)
+						}
+					}//!LIST
     
 				}// ==!
 				
