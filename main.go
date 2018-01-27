@@ -99,7 +99,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getAirJson(result []AIRINFO) error {
+func getAirJson(result *[]AIRINFO) error {
 	url := "http://opendata2.epa.gov.tw/AQI.json"
 	resp, err := http.Get(url)
     if err != nil {
@@ -112,7 +112,7 @@ func getAirJson(result []AIRINFO) error {
     }
     // We could check the resulting content type
     // here if desired.
-    err = json.NewDecoder(resp.Body).Decode(&result)
+    err = json.NewDecoder(resp.Body).Decode(result)
 
     if err != nil {
         return fmt.Errorf("cannot decode JSON: %v", err)
