@@ -198,7 +198,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 						colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
 						upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.active":1}}
-						err := c.Update(colQuerier, upsertData)
+						err = c.Update(colQuerier, upsertData)
 						if err != nil {
 							log.Println(err)
 						}
