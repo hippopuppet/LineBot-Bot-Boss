@@ -48,6 +48,8 @@ type GROUPINFO struct {
 	Active int `bson:"active" json:"active"`
 }
 
+
+
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
 	M := orgTime - (H*100)
@@ -79,13 +81,12 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getBossJson() JSONDATA {
-   raw, err := ioutil.ReadFile("./BossRefreshInfo.json")
+func getJson() JSONDATA {
+   raw, err := ioutil.ReadFile("http://opendata2.epa.gov.tw/AQX.json")
     if err != nil {
         log.Println(err.Error())
-        os.Exit(1)
+        //os.Exit(1)
     }
-
     var c JSONDATA
     json.Unmarshal(raw, &c)
     return c
@@ -336,26 +337,22 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			// Upsert
-			index := len(dbResult[0].GroupInfo)
-			if index <= 0 {
-				log.Println("index <= 0 ")
-				upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "group", "active":0}}}
-				info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
-				if err != nil {
-					log.Println(err)
-				}
-				log.Println(info)
+			colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
+			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
+			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.UserID, "type": "user", "active":0}}}
+			info, err := c.Upsert(colQuerier, upsertData)
+			if err != nil {
+				log.Println(err)
+				//if err == mgp.findAndModifyFailed {
+					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.UserID, "type": "user", "active":0}}}
+					info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
+					if err != nil {
+						log.Println(err)
+					}
+					log.Println(info)
+				//}
 			}
-			if index > 0 {
-				log.Println("index > 0 ")
-				colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
-				upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0}}
-				info, err := c.Upsert(colQuerier, upsertData)
-				if err != nil {
-					log.Println(err)
-				}
-				log.Println(info)
-			}
+			log.Println(info)
 			originalContentURL := "https://i.imgur.com/Qr2DKSG.jpg"
 			previewImageURL := "https://i.imgur.com/Qr2DKSG.jpg"
 			message := linebot.NewImageMessage(originalContentURL, previewImageURL)
@@ -383,18 +380,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			// Upsert
-			/*index := len(dbResult[0].GroupInfo)
-			if index <= 0 {
-				log.Println("index <= 0 ")
-				upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.UserID, "type": "user", "active":0}}}
-				//upsertData := bson.M{"$push": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
-				info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
-				if err != nil {
-					log.Println(err)
-				}
-				log.Println(info)
-			}*/
-			
 			colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
 			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
 			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.UserID, "type": "user", "active":0}}}
