@@ -134,7 +134,7 @@ func main() {
 					JetLag := NOWTIME - ResurrectionA
 					if JetLag <= 10 && JetLag > 0 {
 						for _, groupinfo := range dbResult[0].GroupInfo {
-							if dbResult[0].GroupInfo[i].Active == 1 {
+							if groupinfo.Active == 1 {
 								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
 									log.Print(err)
 								}
