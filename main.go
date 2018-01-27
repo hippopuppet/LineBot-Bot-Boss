@@ -362,7 +362,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeFollow {
-		/*
+		
 			//[CONNECT DB]
 			session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
 			if err != nil {
@@ -402,7 +402,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 				log.Println(info)
 			}
-		*/
+		
 		originalContentURL := "https://i.imgur.com/Qr2DKSG.jpg"
 		previewImageURL := "https://i.imgur.com/Qr2DKSG.jpg"
 		message := linebot.NewImageMessage(originalContentURL, previewImageURL)
