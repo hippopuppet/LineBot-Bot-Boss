@@ -99,7 +99,7 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getAirJson(result interface{}) error {
+func getAirJson(result AIRINFO) error {
 	url := "http://opendata2.epa.gov.tw/AQI.json"
 	resp, err := http.Get(url)
     if err != nil {
@@ -374,8 +374,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if message.Text == "!PM" {
-						airJson := bson.M{}
-						getAirJson(airJson)
+						airJson := AIRINFO{}
+						getAirJson(&airJson)
 						log.Println(airJson)
 					}
 
