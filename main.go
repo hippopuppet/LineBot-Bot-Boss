@@ -327,6 +327,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(err)
 						}
 					}//!LIST
+					if message.Text == "!PM" {
+						airJson := AIRINFO{}
+						airJson = getAirJson()
+						log.Println(airJson)
+					}
+
     
 				}// ==!
 				
