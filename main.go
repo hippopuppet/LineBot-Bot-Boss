@@ -99,14 +99,13 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getJson(url string ) JSONDATA {
-   raw, err := ioutil.ReadFile(url) 
-   //"http://opendata2.epa.gov.tw/AQX.json"
+func getAirJson() AIRINFO {
+   raw, err := ioutil.ReadFile("http://opendata2.epa.gov.tw/AQX.json")
     if err != nil {
         log.Println(err.Error())
         //os.Exit(1)
     }
-    var c JSONDATA
+    var c AIRINFO
     json.Unmarshal(raw, &c)
     return c
 }
