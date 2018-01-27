@@ -100,7 +100,7 @@ func toJson(p interface{}) string {
 }
 
 func getAirJson() AIRINFO {
-   raw, err := ioutil.ReadFile("http://opendata2.epa.gov.tw/AQI.json")
+   raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
     if err != nil {
         log.Println(err.Error())
         //os.Exit(1)
