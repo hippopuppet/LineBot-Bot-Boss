@@ -99,15 +99,26 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getAirJson() AIRINFO {
-   raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
+func getAirJson(target interface{}) error {
+	var myClient = &http.Client{Timeout: 10 * time.Second}
+    r, err := myClient.Get("http://opendata2.epa.gov.tw/AQI.json")
+    if err != nil {
+        return err
+    }
+    defer r.Body.Close()
+
+    return json.NewDecoder(r.Body).Decode(target)
+
+
+
+   /*raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
     if err != nil {
         log.Println(err.Error())
         //os.Exit(1)
     }
     var c AIRINFO
     json.Unmarshal(raw, &c)
-    return c
+    return c*/
 }
 
 var bot *linebot.Client
@@ -328,8 +339,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if message.Text == "!PM" {
-						airJson := AIRINFO{}
-						airJson = getAirJson()
+						airJson := bson.M{}
+						getAirJson(airJson)
 						log.Println(airJson)
 					}
 
