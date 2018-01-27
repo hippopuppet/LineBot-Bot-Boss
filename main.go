@@ -108,7 +108,6 @@ func main() {
 				NOWTIME := time.Now().In(local).Hour()*60+time.Now().In(local).Minute()+10
 				log.Println("NOWTIME-"+strconv.Itoa(NOWTIME))
 
-				//log.Println("CONNECT DB....")
 				//[CONNECT DB]
 				session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
 				if err != nil {
@@ -120,7 +119,6 @@ func main() {
 				session.SetMode(mgo.Monotonic, true)
 
 				c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-				//log.Println("find data...")
 				var dbResult []JSONDATA
 				err = c.Find(nil).All(&dbResult)
 				if err != nil {
@@ -128,34 +126,23 @@ func main() {
 				}
 								
 				for _, bossinfo := range dbResult[0].BossInfo {
-					//log.Println("bossinfo.Resurrection "+bossinfo.Resurrection)
 					bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
 					if err != nil {
 						log.Print(err)
 					}
 					ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
-					//log.Println("ResurrectionA "+strconv.Itoa(ResurrectionA))
-
 					JetLag := NOWTIME - ResurrectionA
-					//log.Println("JetLag "+strconv.Itoa(JetLag))
-					//if JetLag < 0 {
-					//	JetLag = -JetLag
-					//}
-					//log.Println("UJetLag "+strconv.Itoa(JetLag))
-
 					if JetLag <= 10 && JetLag > 0 {
-						if groupID != ""{
-							if _, err := bot.PushMessage(groupID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
-								log.Print(err)
+						for i, groupinfo := range dbResult[0].GroupInfo {
+							if dbResult[0].GroupInfo[i].Active == 1 {
+								if _, err := bot.PushMessage(dbResult[0].GroupInfo[i].Id, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
+									log.Print(err)
+								}
 							}
 						}
-						if userID != ""{
-							if _, err := bot.PushMessage(userID, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
-								log.Print(err)
-							}
-						}
-					}
+					}//if JetLag <= 10 && JetLag > 0
 				}	
+					
 			case <- doneChan:
 				log.Println("Done")
 				return
@@ -199,7 +186,25 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					//doneChan <- true
 					}
 					if message.Text == "!START" {
-						log.Print(event.Source.GroupID)
+						//[CONNECT DB]
+						session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+						if err != nil {
+							panic(err)
+						}
+						defer session.Close()
+						// Optional. Switch the session to a monotonic behavior.
+						session.SetMode(mgo.Monotonic, true)
+						c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+
+						colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
+						upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.active":1}}
+						info, err := c.Update(colQuerier, upsertData)
+						if err != nil {
+							log.Println(err)
+						}
+						log.Println(info)
+						
+						
 						if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("START CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
 							log.Print(err)
 						}
