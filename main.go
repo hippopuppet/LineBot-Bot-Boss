@@ -174,7 +174,7 @@ func main() {
 					if JetLag == 10 {
 						for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Active == 1 {
-								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +"ALREADY RESURRECTION!!!!!!! Map: "+ bossinfo.Map)).Do(); err != nil {
+								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +" ALREADY RESURRECTION!!!!!!! Map: "+ bossinfo.Map)).Do(); err != nil {
 									log.Print(err)
 								}
 							}
