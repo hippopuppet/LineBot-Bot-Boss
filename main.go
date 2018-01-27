@@ -307,8 +307,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										log.Print(err)
 									}
 									intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
-									strNewDieTime := strconv.Itoa(intNewDieTime)										
-									dbResult[0].BossInfo[i].Resurrection = strNewDieTime										
+									strNewDieTime := strconv.Itoa(intNewDieTime)
+									lens := len(strNewDieTime)
+									var list_buf bytes.Buffer
+									for  i := 0 ; i < 4-lens ; i++ {
+										list_buf.WriteString("0")
+									}
+									list_buf.WriteString(strNewDieTime)		
+									dbResult[0].BossInfo[i].Resurrection = list_buf.String()										
 									// Update
 									colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
 									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
@@ -361,11 +367,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString(". ")
 							list_buf.WriteString(bossinfo.KingOfName)
 							list_buf.WriteString(" : ")
-							
-							lens := len(bossinfo.Resurrection)
-							for  i := 0 ; i < 4-lens ; i++ {
-								list_buf.WriteString("0")
-							}
 							list_buf.WriteString(bossinfo.Resurrection)
 							list_buf.WriteString("   Map: ")
 							list_buf.WriteString(bossinfo.Map)
