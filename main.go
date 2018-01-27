@@ -375,7 +375,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							var airJson []AIRINFO
 							getAirJson(&airJson)
 							log.Println(airJson)
-							for i, airinfo := range airJson {
+							for _, airinfo := range airJson {
 								if airinfo.SiteName == result[1] {
 									var airinfo_buf bytes.Buffer
 									airinfo_buf.WriteString(airinfo.SiteName)
