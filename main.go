@@ -361,6 +361,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString(". ")
 							list_buf.WriteString(bossinfo.KingOfName)
 							list_buf.WriteString(" : ")
+							aResurrection := strconv.Itoa(bossinfo.Resurrection)
+							lens := len(aResurrection)
+							for  i := 0 ; i < 4-lens ; ++i {
+								list_buf.WriteString("0")
+							}
+
 							list_buf.WriteString(bossinfo.Resurrection)
 							list_buf.WriteString("   Map: ")
 							list_buf.WriteString(bossinfo.Map)
