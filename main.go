@@ -380,8 +380,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			// Upsert
-			index := len(dbResult[0].GroupInfo)
-			/*if index <= 0 {
+			/*index := len(dbResult[0].GroupInfo)
+			if index <= 0 {
 				log.Println("index <= 0 ")
 				upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.UserID, "type": "user", "active":0}}}
 				//upsertData := bson.M{"$push": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
