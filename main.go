@@ -105,7 +105,7 @@ func getAirJson(target interface{}) error {
     if err != nil {
         return err
     }
-    defer r.Body.Close
+    defer r.Body.Close()
 	log.Println("r.Body")
 	log.Println(r.Body)
     return json.NewDecoder(r.Body).Decode(target)
