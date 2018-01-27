@@ -133,9 +133,9 @@ func main() {
 					ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
 					JetLag := NOWTIME - ResurrectionA
 					if JetLag <= 10 && JetLag > 0 {
-						for i, groupinfo := range dbResult[0].GroupInfo {
+						for _, groupinfo := range dbResult[0].GroupInfo {
 							if dbResult[0].GroupInfo[i].Active == 1 {
-								if _, err := bot.PushMessage(dbResult[0].GroupInfo[i].Id, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
+								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS APPEARANCE: --"+bossinfo.KingOfName +"--")).Do(); err != nil {
 									log.Print(err)
 								}
 							}
