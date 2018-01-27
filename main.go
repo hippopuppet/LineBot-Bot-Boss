@@ -105,9 +105,10 @@ func getAirJson(target interface{}) error {
     if err != nil {
         return err
     }
-    defer r.Body.Close()
-
-    return json.NewDecoder(r.Body.pre).Decode(target)
+    defer r.Body.Close
+	log.Println("r.Body")
+	log.Println(r.Body)
+    return json.NewDecoder(r.Body).Decode(target)
    /*raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
     if err != nil {
         log.Println(err.Error())
