@@ -293,7 +293,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 						var list_buf bytes.Buffer
 						for i, bossinfo := range dbResult[0].BossInfo {
-							list_buf.WriteString(strconv.Itoa(i))
+							list_buf.WriteString(strconv.Itoa(i+1))
 							list_buf.WriteString(". ")
 							list_buf.WriteString(bossinfo.KingOfName)
 							list_buf.WriteString(" : ")
