@@ -230,8 +230,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 					if result[0] == "!BOSS" {
-						if result[2] == "Die" {
-							if result[3] != "" {
+						//if result[2] == "Die" {
+							if result[2] != "" {
 								log.Println("CONNECT DB....")
 								//[CONNECT DB]
 								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
@@ -252,8 +252,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								isFound := false
 								for i, _ := range dbResult[0].BossInfo {
 									if result[1] == dbResult[0].BossInfo[i].KingOfName {										
-										dbResult[0].BossInfo[i].Die = result[3]
-										intNewDie, err := strconv.Atoi(result[3])
+										dbResult[0].BossInfo[i].Die = result[2]
+										intNewDie, err := strconv.Atoi(result[2])
 										if err != nil {
 											log.Print(err)
 										}
@@ -293,7 +293,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								log.Println("Marshal result: ...")
 								log.Println(string(JsonData))*/
 							}
-						}// ==Die
+						//}// ==Die
 					}// ==!BOSS
 					if message.Text == "!LIST" {
 						//[CONNECT DB]
