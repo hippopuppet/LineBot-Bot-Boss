@@ -274,70 +274,68 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 					if result[0] == "!BOSS" {
-						//if result[2] == "Die" {
-							if result[2] != "" {
-								log.Println("CONNECT DB....")
-								//[CONNECT DB]
-								session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
-								if err != nil {
-								   panic(err)
-								}
-								defer session.Close()
-								// Optional. Switch the session to a monotonic behavior.
-								session.SetMode(mgo.Monotonic, true)
-
-								c := session.DB("heroku_xzzlp7s1").C("bossinfo")
-								log.Println("find data...")
-								var dbResult []JSONDATA
-								err = c.Find(nil).All(&dbResult)
-								if err != nil {
-								   log.Println(err)
-								}
-								isFound := false
-								for i, _ := range dbResult[0].BossInfo {
-									if result[1] == dbResult[0].BossInfo[i].KingOfName {										
-										dbResult[0].BossInfo[i].Die = result[2]
-										intNewDie, err := strconv.Atoi(result[2])
-										if err != nil {
-											log.Print(err)
-										}
-										intNewDieMinute := convertTimetoMinute(intNewDie)
-										intRefreshTick, err := strconv.Atoi(dbResult[0].BossInfo[i].RefreshTick)
-										if err != nil {
-											log.Print(err)
-										}
-										intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
-										strNewDieTime := strconv.Itoa(intNewDieTime)										
-										dbResult[0].BossInfo[i].Resurrection = strNewDieTime										
-										// Update
-										colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
-										change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
-										//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
-										err = c.Update(colQuerier, change)
-										if err != nil {
-											log.Println(err)
-										}
-										if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")).Do(); err != nil {
-											log.Print(err)
-										}
-										isFound = true
-										break
-									}
-								}
-								
-								if isFound == false {
-									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("HAS NO BOSS:"+ result[1])).Do(); err != nil {
-										log.Print(err)
-									}									
-								}
-								/*JsonData, err := json.Marshal(dbResult)
-								if err != nil {
-									log.Print(err)
-								}
-								log.Println("Marshal result: ...")
-								log.Println(string(JsonData))*/
+						if result[2] != "" {
+							log.Println("CONNECT DB....")
+							//[CONNECT DB]
+							session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+							if err != nil {
+								panic(err)
 							}
-						//}// ==Die
+							defer session.Close()
+							// Optional. Switch the session to a monotonic behavior.
+							session.SetMode(mgo.Monotonic, true)
+
+							c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+							log.Println("find data...")
+							var dbResult []JSONDATA
+							err = c.Find(nil).All(&dbResult)
+							if err != nil {
+								log.Println(err)
+							}
+							isFound := false
+							for i, _ := range dbResult[0].BossInfo {
+								if result[1] == dbResult[0].BossInfo[i].KingOfName {										
+									dbResult[0].BossInfo[i].Die = result[2]
+									intNewDie, err := strconv.Atoi(result[2])
+									if err != nil {
+										log.Print(err)
+									}
+									intNewDieMinute := convertTimetoMinute(intNewDie)
+									intRefreshTick, err := strconv.Atoi(dbResult[0].BossInfo[i].RefreshTick)
+									if err != nil {
+										log.Print(err)
+									}
+									intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
+									strNewDieTime := strconv.Itoa(intNewDieTime)										
+									dbResult[0].BossInfo[i].Resurrection = strNewDieTime										
+									// Update
+									colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
+									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
+									//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
+									err = c.Update(colQuerier, change)
+									if err != nil {
+										log.Println(err)
+									}
+									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")).Do(); err != nil {
+										log.Print(err)
+									}
+									isFound = true
+									break
+								}
+							}
+								
+							if isFound == false {
+								if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("HAS NO BOSS:"+ result[1])).Do(); err != nil {
+									log.Print(err)
+								}									
+							}
+							/*JsonData, err := json.Marshal(dbResult)
+							if err != nil {
+								log.Print(err)
+							}
+							log.Println("Marshal result: ...")
+							log.Println(string(JsonData))*/
+						}
 					}// ==!BOSS
 					if message.Text == "!LIST" {
 						//[CONNECT DB]
@@ -372,11 +370,29 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Print(err)
 						}
 					}//!LIST
-					if message.Text == "!PM" {
-						var airJson []AIRINFO
-						getAirJson(&airJson)
-						log.Println(airJson)
-					}
+					if result[0] == "!PM" {
+						if result[1] != ""
+						{
+							var airJson []AIRINFO
+							getAirJson(&airJson)
+							log.Println(airJson)
+							for i, airinfo := range airJson {
+								if airinfo.SiteName == result[1] {
+									var airinfo_buf bytes.Buffer
+									airinfo_buf.WriteString(airinfo.SiteName)
+									airinfo_buf.WriteString("ªº PM2.5 ¼Æ­È¬° ")
+									airinfo_buf.WriteString(airinfo.PM2_5)
+									airinfo_buf.WriteString("ª¬ºA: ")
+									airinfo_buf.WriteString(airinfo.Status)
+
+									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(airinfo_buf.String())).Do(); err != nil {
+										log.Print(err)
+									}
+								}
+							}
+						}
+						
+					}//!PM
 
     
 				}// ==!
