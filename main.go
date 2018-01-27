@@ -39,6 +39,7 @@ type BOSSINFO struct {
 	RefreshTick string `bson:"refreshtick" json:"refreshtick"`
 	Die string `bson:"die" json:"die"`
     Resurrection string `bson:"resurrection" json:"resurrection"`
+	Map string `bson:"map" json:"map"`
 }
 
 type GROUPINFO struct {
@@ -298,6 +299,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString(bossinfo.KingOfName)
 							list_buf.WriteString(" : ")
 							list_buf.WriteString(bossinfo.Resurrection)
+							list_buf.WriteString("   Map: ")
+							list_buf.WriteString(bossinfo.Map)
 							list_buf.WriteString("\n")							
 						}
      
