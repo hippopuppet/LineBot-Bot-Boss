@@ -67,7 +67,9 @@ type AIRINFO struct {
 	WindDirec string `bson:"WindDirec" json:"WindDirec"`
 	WindSpeed string `bson:"WindSpeed" json:"WindSpeed"`
 }
-
+type Foo struct {
+    Bar string
+}
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
 	M := orgTime - (H*100)
@@ -363,9 +365,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if message.Text == "!PM" {
-						airJson := bson.M{}
+						airJson := Foo{}
 						getAirJson(&airJson)
-						log.Println(airJson)
+						log.Println(airJson.Bar)
 					}
 
     
