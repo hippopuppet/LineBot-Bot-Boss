@@ -48,7 +48,25 @@ type GROUPINFO struct {
 	Active int `bson:"active" json:"active"`
 }
 
-
+type AIRINFO struct {
+	CO string `bson:"CO" json:"CO"`
+	County string `bson:"County" json:"County"`
+	FPMI string `bson:"FPMI" json:"FPMI"`
+	MajorPollutant string `bson:"MajorPollutant" json:"MajorPollutant"`
+	NO string `bson:"NO" json:"NO"`
+	NO2 string `bson:"NO2" json:"NO2"`
+	NOx string `bson:"NOx" json:"NOx"`
+	O3 string `bson:"O3" json:"O3"`
+	PM10 string `bson:"PM10" json:"PM10"`
+	PM2.5 string `bson:"PM2.5" json:"PM2.5"`
+	PSI string `bson:"PSI" json:"PSI"`
+	PublishTime string `bson:"PublishTime" json:"PublishTime"`
+	SiteName string `bson:"SiteName" json:"SiteName"`
+	SO2 string `bson:"SO2" json:"SO2"`
+	Status string `bson:"Status" json:"Status"`
+	WindDirec string `bson:"WindDirec" json:"WindDirec"`
+	WindSpeed string `bson:"WindSpeed" json:"WindSpeed"`
+}
 
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
@@ -81,8 +99,8 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getJson() JSONDATA {
-   raw, err := ioutil.ReadFile("http://opendata2.epa.gov.tw/AQX.json")
+func getJson(string url) interface {
+   raw, err := ioutil.ReadFile(url) //"http://opendata2.epa.gov.tw/AQX.json"
     if err != nil {
         log.Println(err.Error())
         //os.Exit(1)
@@ -337,14 +355,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			// Upsert
-			colQuerier := bson.M{"GROUPINFO.id" : event.Source.UserID}
-			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.UserID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
-			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.UserID, "type": "user", "active":0}}}
+			colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
+			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "user", "GROUPINFO.$.active":0}}
+			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
 			info, err := c.Upsert(colQuerier, upsertData)
 			if err != nil {
 				log.Println(err)
 				//if err == mgp.findAndModifyFailed {
-					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.UserID, "type": "user", "active":0}}}
+					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "user", "active":0}}}
 					info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
 					if err != nil {
 						log.Println(err)
