@@ -301,7 +301,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString("\n")							
 						}
      
-						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf)).Do(); err != nil {
+						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf.String())).Do(); err != nil {
 							log.Print(err)
 						}
 					}//!LIST
