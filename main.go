@@ -99,16 +99,26 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getAirJson(target AIRINFO) error {
-	var myClient = &http.Client{Timeout: 10 * time.Second}
-    r, err := myClient.Get("http://opendata2.epa.gov.tw/AQI.json")
+func getAirJson(target interface{}) error {
+	resp, err := http.Get("http://opendata2.epa.gov.tw/AQI.json")
     if err != nil {
-        return err
+        return fmt.Errorf("cannot fetch URL %q: %v", url, err)
     }
     defer r.Body.Close()
-	log.Println("r.Body")
-	log.Println(&r.Body)
-    return json.NewDecoder(r.Body).Decode(&target)
+
+	if resp.StatusCode != http.StatusOK {
+        return fmt.Errorf("unexpected http GET status: %s", resp.Status)
+    }
+    // We could check the resulting content type
+    // here if desired.
+    err := json.NewDecoder(resp.Body).Decode(result)
+	log.Println("result")
+	log.Println(result)
+    if err != nil {
+        return fmt.Errorf("cannot decode JSON: %v", err)
+    }
+    return nil
+
    /*raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
     if err != nil {
         log.Println(err.Error())
@@ -363,7 +373,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if message.Text == "!PM" {
-						airJson := AIRINFO{}
+						airJson := bson.M{}
 						getAirJson(airJson)
 						log.Println(airJson)
 					}
