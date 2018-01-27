@@ -371,25 +371,40 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						}
 					}//!LIST
 					if result[0] == "!PM" {
-						if result[1] != "" {
+						if len(result) > 1 {
 							var airJson []AIRINFO
 							getAirJson(&airJson)
 							log.Println(airJson)
+							isFound := false
 							for _, airinfo := range airJson {
 								if airinfo.SiteName == result[1] {
 									var airinfo_buf bytes.Buffer
 									airinfo_buf.WriteString(airinfo.SiteName)
-									airinfo_buf.WriteString("çš„ PM2.5 æ•¸å€¼ç‚º ")
+									airinfo_buf.WriteString("ªº PM2.5 ¼Æ­È¬° ")
 									airinfo_buf.WriteString(airinfo.PM2_5)
-									airinfo_buf.WriteString("ç‹€æ…‹: ")
+									airinfo_buf.WriteString("ª¬ºA ")
 									airinfo_buf.WriteString(airinfo.Status)
 
 									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(airinfo_buf.String())).Do(); err != nil {
 										log.Print(err)
 									}
+									isFound = true
 								}
 							}
-						}						
+							if isFound == false {
+								var airinfo_buf bytes.Buffer
+								airinfo_buf.WriteString("¨S¦³")
+								airinfo_buf.WriteString(result[1])
+								airinfo_buf.WriteString("ªº PM2.5 ¸ê®Æ")
+								if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(airinfo_buf.String())).Do(); err != nil {
+										log.Print(err)
+								}
+							}
+						} else {
+							if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("½Ð¿é¤J±ý¬d¸ßPM2.5¸ê®Æªº¦aÂI")).Do(); err != nil {
+									log.Print(err)
+							}
+						}
 					}//!PM
 
     
