@@ -398,7 +398,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			info, err := c.Upsert(colQuerier, upsertData)
 			if err != nil {
 				log.Println(err)
-				if err == errors.New("The positional operator did not find the match needed from the query. Unexpanded update: GROUPINFO.$.id") {
+				if err == "The positional operator did not find the match needed from the query. Unexpanded update: GROUPINFO.$.id") {
 					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.UserID, "type": "user", "active":0}}}
 					info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
 					if err != nil {
