@@ -99,9 +99,9 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getJson(string url) interface {
+func getJson(url string) interface {
    raw, err := ioutil.ReadFile(url) 
-   
+   //"http://opendata2.epa.gov.tw/AQX.json"
     if err != nil {
         log.Println(err.Error())
         //os.Exit(1)
