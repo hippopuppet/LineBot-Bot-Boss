@@ -154,7 +154,7 @@ func main() {
 					}
 					ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
 					JetLag := NOWTIME - ResurrectionA
-					if JetLag <= 10 && JetLag > 0 {
+					if JetLag == 10 && JetLag == 3{
 						for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Active == 1 {
 								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS APPEARANCE: "+bossinfo.KingOfName +" Map: "+ bossinfo.Map)).Do(); err != nil {
