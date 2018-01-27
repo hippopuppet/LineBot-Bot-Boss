@@ -210,6 +210,23 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				 if string(message.Text[0]) == "!" {
 					result := strings.Split(message.Text," ")
 					if message.Text == "!STOP" {
+						//[CONNECT DB]
+						session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+						if err != nil {
+							panic(err)
+						}
+						defer session.Close()
+						// Optional. Switch the session to a monotonic behavior.
+						session.SetMode(mgo.Monotonic, true)
+						c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+
+						colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
+						upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.active":0}}
+						err = c.Update(colQuerier, upsertData)
+						if err != nil {
+							log.Println(err)
+						}
+
 						if _, err := bot.PushMessage(event.Source.GroupID, linebot.NewTextMessage("STOP CALL ATTENTION TO BOSS RESURRECTION !! ")).Do(); err != nil {
 							log.Print(err)
 						}
