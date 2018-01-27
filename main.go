@@ -112,7 +112,7 @@ func getAirJson(result interface{}) error {
     }
     // We could check the resulting content type
     // here if desired.
-    err := json.NewDecoder(resp.Body).Decode(result)
+    err = json.NewDecoder(resp.Body).Decode(result)
 	log.Println("result")
 	log.Println(result)
     if err != nil {
