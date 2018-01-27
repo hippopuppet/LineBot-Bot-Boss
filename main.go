@@ -58,7 +58,7 @@ type AIRINFO struct {
 	NOx string `bson:"NOx" json:"NOx"`
 	O3 string `bson:"O3" json:"O3"`
 	PM10 string `bson:"PM10" json:"PM10"`
-	PM2.5 string `bson:"PM2.5" json:"PM2.5"`
+	PM2_5 string `bson:"PM2.5" json:"PM2.5"`
 	PSI string `bson:"PSI" json:"PSI"`
 	PublishTime string `bson:"PublishTime" json:"PublishTime"`
 	SiteName string `bson:"SiteName" json:"SiteName"`
