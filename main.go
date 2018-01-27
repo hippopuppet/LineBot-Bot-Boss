@@ -176,7 +176,7 @@ func main() {
 						
 						for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Active == 1 {
-								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +"將在"+bossinfo.Resurrection+"?��?! Map: "+ bossinfo.Map)).Do(); err != nil {
+								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +"將在"+bossinfo.Resurrection+"重生! Map: "+ bossinfo.Map)).Do(); err != nil {
 									log.Print(err)
 								}
 							}
@@ -185,7 +185,7 @@ func main() {
 					if JetLag == 10 {
 						for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Active == 1 {
-								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +" 已�??��?�?!! Map: "+ bossinfo.Map)).Do(); err != nil {
+								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +" 已經重生了!!! Map: "+ bossinfo.Map)).Do(); err != nil {
 									log.Print(err)
 								}
 							}
@@ -381,9 +381,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								if airinfo.SiteName == result[1] {
 									var airinfo_buf bytes.Buffer
 									airinfo_buf.WriteString(airinfo.SiteName)
-									airinfo_buf.WriteString("??PM2.5 ?詨潛 ")
+									airinfo_buf.WriteString("的 PM2.5 數值為 ")
 									airinfo_buf.WriteString(airinfo.PM2_5)
-									airinfo_buf.WriteString("????")
+									airinfo_buf.WriteString("狀態 ")
 									airinfo_buf.WriteString(airinfo.Status)
 
 									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(airinfo_buf.String())).Do(); err != nil {
@@ -394,15 +394,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							}
 							if isFound == false {
 								var airinfo_buf bytes.Buffer
-								airinfo_buf.WriteString("?��??")
+								airinfo_buf.WriteString("沒有")
 								airinfo_buf.WriteString(result[1])
-								airinfo_buf.WriteString("??PM2.5 ?�?")
+								airinfo_buf.WriteString("的 PM2.5 資料")
 								if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(airinfo_buf.String())).Do(); err != nil {
 										log.Print(err)
 								}
 							}
 						} else {
-							if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("?��???交炬?亥岷PM2.5?�???�??)).Do(); err != nil {
+							if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("請輸入欲查詢PM2.5資料的地點")).Do(); err != nil {
 									log.Print(err)
 							}
 						}
