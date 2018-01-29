@@ -40,6 +40,7 @@ type BOSSINFO struct {
 	Die string `bson:"die" json:"die"`
     Resurrection string `bson:"resurrection" json:"resurrection"`
 	Map string `bson:"map" json:"map"`
+    UpdateDate string `bson:"updatedate" json:"updatedate"`
 }
 
 type GROUPINFO struct {
@@ -314,10 +315,15 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 										list_buf.WriteString("0")
 									}
 									list_buf.WriteString(strNewDieTime)		
-									dbResult[0].BossInfo[i].Resurrection = list_buf.String()										
+									dbResult[0].BossInfo[i].Resurrection = list_buf.String()
+									
+									var local *time.Location
+									local, ok := time.LoadLocation("Asia/Taipei")
+									_NowTime := time.Now().In(local)
+									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")	
 									// Update
 									colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
-									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection}}
+									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate}}
 									//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 									err = c.Update(colQuerier, change)
 									if err != nil {
