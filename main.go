@@ -174,7 +174,7 @@ func main() {
 					}
 					ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
 					JetLag := NOWTIME - ResurrectionA
-					if JetLag == 0 || JetLag == 7 {
+					if JetLag == 5/* || JetLag == 7*/ {
 						
 						for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Active == 1 {
@@ -184,7 +184,7 @@ func main() {
 							}
 						}
 					}//if JetLag == 0 || JetLag == 7 
-					if JetLag == 10 {
+					/*if JetLag == 10 {
 						for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Active == 1 {
 								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +" 已經重生了!!! Map: "+ bossinfo.Map)).Do(); err != nil {
@@ -192,7 +192,7 @@ func main() {
 								}
 							}
 						}
-					}//if JetLag == 10 
+					}//if JetLag == 10 */
 				}	
 					
 			case <- doneChan:
