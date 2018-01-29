@@ -322,10 +322,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									local, ok := time.LoadLocation("Asia/Taipei")
 									log.Print(ok)
 									_NowTime := time.Now().In(local)
-									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")	
+									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")
+
+									res, err := linebot.GetUserProfile(event.Source.UserID).Do();
+									if err != nil {
+										log.Println(err)
+									}
+									dbResult[0].BossInfo[i].Author = res.Displayname
 									// Update
 									colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
-									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate}}
+									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate,"BOSSINFO.$.author":dbResult[0].BossInfo[i].Author}}
 									//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
 									err = c.Update(colQuerier, change)
 									if err != nil {
@@ -380,6 +386,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString(bossinfo.Map)
 							list_buf.WriteString("   Last Upate: ")
 							list_buf.WriteString(bossinfo.UpdateDate)
+							list_buf.WriteString(" from: ")
+							list_buf.WriteString(bossinfo.Author)
 							list_buf.WriteString("\n")							
 						}
      
