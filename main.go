@@ -324,7 +324,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									_NowTime := time.Now().In(local)
 									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")
 
-									res, err := bot.GetUserProfile(event.Source.UserID).Do();
+									res, err := bot.getUserProfile(event.Source.UserID).Do();
 									if err != nil {
 										log.Println(err)
 									}
