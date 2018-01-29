@@ -41,6 +41,7 @@ type BOSSINFO struct {
     Resurrection string `bson:"resurrection" json:"resurrection"`
 	Map string `bson:"map" json:"map"`
     UpdateDate string `bson:"updatedate" json:"updatedate"`
+	Author string `bson:"author" json:"author"`
 }
 
 type GROUPINFO struct {
