@@ -324,11 +324,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									_NowTime := time.Now().In(local)
 									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")
 
-									res, err := bot.GetProfile(event.Source.UserID).Do();
+									profile, err := bot.GetProfile(event.Source.UserID).Do();
 									if err != nil {
 										log.Println(err)
 									}
-									dbResult[0].BossInfo[i].Author = res.displayName
+									dbResult[0].BossInfo[i].Author = profile.DisplayName
 									// Update
 									colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
 									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate,"BOSSINFO.$.author":dbResult[0].BossInfo[i].Author}}
