@@ -319,6 +319,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									
 									var local *time.Location
 									local, ok := time.LoadLocation("Asia/Taipei")
+									log.Print(ok)
 									_NowTime := time.Now().In(local)
 									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")	
 									// Update
