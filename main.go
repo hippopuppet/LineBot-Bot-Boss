@@ -376,6 +376,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString(bossinfo.Resurrection)
 							list_buf.WriteString("   Map: ")
 							list_buf.WriteString(bossinfo.Map)
+							list_buf.WriteString("   UpdateDate: ")
+							list_buf.WriteString(bossinfo.UpdateDate)
 							list_buf.WriteString("\n")							
 						}
      
