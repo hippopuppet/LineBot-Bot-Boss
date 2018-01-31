@@ -486,27 +486,36 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					local, _ = time.LoadLocation("Asia/Taipei")
 					_Year,_Month,_Day := time.Now().In(local).Date()
 					_strMonth := strconv.Itoa(int(_Month))
-					log.Print("_Year")
-					log.Print(_Year)
-					log.Print("_Month")
-					log.Print(_strMonth)
-					log.Print("_Day")
-					log.Print(_Day)
+					lens := len(strNewDieTime)
 					
-					/*
-					CURRENT_NOW := _NowTime
-					CURRENT_NANO := time.Now().UnixNano()/int64(time.Millisecond)
+					var month_buf bytes.Buffer
+					for  i := 0 ; i < 2-lens ; i++ {
+						month_buf.WriteString("0")
+					}
+					month_buf.WriteString(_strMonth)
+					var day_buf bytes.Buffer
+					for  i := 0 ; i < 2-lens ; i++ {
+						day_buf.WriteString("0")
+					}
+					day_buf.WriteString(strconv.Itoa(_Day))
+
+					var date_buf bytes.Buffer
+					date_buf.WriteString(strconv.Itoa(_Year))
+					date_buf.WriteString(month_buf)
+					date_buf.WriteString(day_buf)
+					
+					CURRENT_NANO := time.Now().In(local).UnixNano()/int64(time.Millisecond)
 					CURRENT_MILLIS := strconv.FormatInt(CURRENT_NANO, 10)
 					
 					stocknum := message.Text[1:]
 					var stockJson []STOCKINFO
 					var stockresult interface{}
-					2330.tw&json=1&delay=0&d=20180131&_=1517379386077
-					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="++"&_="+CURRENT_MILLIS
+
+					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf+"&_="+CURRENT_MILLIS
 					getJson(URL, &stockresult)
 					stockByte, _ := json.Marshal(stockresult)
 					log.Print("stockByte")
-					log.Print(string(stockByte))*/
+					log.Print(string(stockByte))
 					
 				}// == P
 				
