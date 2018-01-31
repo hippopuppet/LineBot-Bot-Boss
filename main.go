@@ -445,7 +445,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					stocknum := message.Text[1:]
 					var stockresult interface{}
 					getJson("http://opendata2.epa.gov.tw/AQI.json", &stockresult)
-					stockByte, _ := json.Marshal(airresult)
+					stockByte, _ := json.Marshal(stockresult)
 					log.Print("stockByte")
 					log.Print(string(stockByte))
 					
