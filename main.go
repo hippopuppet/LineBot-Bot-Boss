@@ -70,6 +70,46 @@ type AIRINFO struct {
 	WindSpeed string `bson:"WindSpeed" json:"WindSpeed"`
 }
 
+type STOCKINFO struct {
+	TS string `bson:"ts" json:"ts"`
+	FV string `bson:"fv" json:"fv"`
+	TK0 string `bson:"tk0" json:"tk0"`
+	TK1 string `bson:"tk1" json:"tk1"`
+	OA string `bson:"oa" json:"oa"`
+	OB string `bson:"ob" json:"ob"`
+	TLONG string `bson:"tlong" json:"tlong"`
+	OT string `bson:"ot" json:"ot"`
+	F string `bson:"f" json:"f"`
+	EX string `bson:"ex" json:"ex"`
+	G string `bson:"g" json:"g"`
+	OV string `bson:"ov" json:"ov"`
+	D string `bson:"d" json:"d"`
+	IT string `bson:"it" json:"it"`
+	B string `bson:"b" json:"b"`
+	C string `bson:"c" json:"c"`
+	MT string `bson:"mt" json:"mt"`
+	A string `bson:"a" json:"a"`
+	N string `bson:"n" json:"n"`
+	O string `bson:"o" json:"o"`
+	L string `bson:"l" json:"l"`
+	OZ string `bson:"oz" json:"oz"`
+	H string `bson:"h" json:"h"`
+	IP string `bson:"ip" json:"ip"`
+	I string `bson:"i" json:"i"`
+	W string `bson:"w" json:"w"`
+	V string `bson:"v" json:"v"`
+	U string `bson:"u" json:"u"`
+	T string `bson:"t" json:"t"`
+	S string `bson:"s" json:"s"`
+	PZ string `bson:"pz" json:"pz"`
+	TV string `bson:"tv" json:"tv"`
+	P string `bson:"p" json:"p"` 
+	NF string `bson:"nf" json:"nf"`
+	CH string `bson:"ch" json:"ch"`
+	Z string `bson:"z" json:"z"`
+	Y string `bson:"y" json:"y"`
+	PS string `bson:"ps" json:"ps"`
+}
 
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
@@ -442,21 +482,25 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
     
 				}// ==!
 				if string(message.Text[0]) == "P" {
-
+					var local *time.Location
+					local, _ := time.LoadLocation("Asia/Taipei")
+					_Year := time.Now().In(local).Date()
+					log.Print("Date")
+					log.Print(_Year)
+					/*
+					CURRENT_NOW := _NowTime
 					CURRENT_NANO := time.Now().UnixNano()/int64(time.Millisecond)
-					log.Print("CURRENT_NANO")
-					log.Print(CURRENT_NANO)
 					CURRENT_MILLIS := strconv.FormatInt(CURRENT_NANO, 10)
-					log.Print("CURRENT_MILLIS")
-					log.Print(CURRENT_MILLIS)
+					
 					stocknum := message.Text[1:]
+					var stockJson []STOCKINFO
 					var stockresult interface{}
-					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&_"+CURRENT_MILLIS+""
-					log.Print(URL)
+					2330.tw&json=1&delay=0&d=20180131&_=1517379386077
+					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="++"&_="+CURRENT_MILLIS
 					getJson(URL, &stockresult)
 					stockByte, _ := json.Marshal(stockresult)
 					log.Print("stockByte")
-					log.Print(string(stockByte))
+					log.Print(string(stockByte))*/
 					
 				}// == P
 				
