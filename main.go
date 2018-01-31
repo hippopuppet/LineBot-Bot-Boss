@@ -490,7 +490,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print("_Month")
 					log.Print(_Month)
 					log.Print("_Day")
-					log.Print(_Day)
+					log.Print(time.November)
+					
 					/*
 					CURRENT_NOW := _NowTime
 					CURRENT_NANO := time.Now().UnixNano()/int64(time.Millisecond)
