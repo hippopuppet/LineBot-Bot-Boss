@@ -70,6 +70,10 @@ type AIRINFO struct {
 	WindSpeed string `bson:"WindSpeed" json:"WindSpeed"`
 }
 
+type AIRINFO struct {
+	
+}
+
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
 	M := orgTime - (H*100)
@@ -115,8 +119,6 @@ func getJson(url string, result interface{}) error {
     // We could check the resulting content type
     // here if desired.
     err = json.NewDecoder(resp.Body).Decode(&result)
-	log.Println("PM result...")
-	log.Println(result)
     if err != nil {
         return fmt.Errorf("cannot decode JSON: %v", err)
     }
@@ -401,8 +403,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							var airJson []AIRINFO
 							var airresult interface{}
 							getJson("http://opendata2.epa.gov.tw/AQI.json", &airresult)
-							log.Println("airresult...")
-							log.Println(airresult)
 							airByte, _ := json.Marshal(airresult)
 							json.Unmarshal(airByte, &airJson)
 							//err = json.NewDecoder(airresult).Decode(&airJson)
@@ -445,7 +445,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
     
 				}// ==!
 				if string(message.Text[0]) == "P" {
-					
+					stocknum := *message.Text++
+					log.Println("stocknum: %v", stocknum)
+					//var airresult interface{}
+					//getJson("http://opendata2.epa.gov.tw/AQI.json", &airresult)
 					
 				}// == P
 				
