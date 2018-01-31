@@ -519,7 +519,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					CURRENT_MILLIS := strconv.FormatInt(CURRENT_NANO, 10)
 					
 					stocknum := message.Text[1:]
-					var stockJson []STOCKINFO
+					//var stockJson []STOCKINFO
 					var stockresult interface{}
 
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
