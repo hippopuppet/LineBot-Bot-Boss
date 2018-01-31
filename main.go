@@ -115,7 +115,8 @@ func getJson(url string, result interface{}) error {
     // We could check the resulting content type
     // here if desired.
     err = json.NewDecoder(resp.Body).Decode(result)
-
+	log.Println("PM result...")
+	log.Println(result)
     if err != nil {
         return fmt.Errorf("cannot decode JSON: %v", err)
     }
