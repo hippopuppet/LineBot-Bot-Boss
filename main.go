@@ -485,13 +485,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					var local *time.Location
 					local, _ = time.LoadLocation("Asia/Taipei")
 					_Year,_Month,_Day := time.Now().In(local).Date()
+					i := int(_Month)
+					stri := strconv.Itoa(i)
 					log.Print("_Year")
 					log.Print(_Year)
 					log.Print("_Month")
-					log.Print(_Month)
+					log.Print(stri)
 					log.Print("_Day")
-					log.Print(time.November)
+					log.Print(_Day)
+					switch _Month {
 					
+					}
 					/*
 					CURRENT_NOW := _NowTime
 					CURRENT_NANO := time.Now().UnixNano()/int64(time.Millisecond)
