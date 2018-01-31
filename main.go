@@ -494,13 +494,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					local, _ = time.LoadLocation("Asia/Taipei")
 					_Year,_Month,_Day := time.Now().In(local).Date()
 					_strMonth := strconv.Itoa(int(_Month))
-					lens := len(strNewDieTime)
+					_strDay := strconv.Itoa(int(_Day))
 					
+					lens := len(_strMonth)
 					var month_buf bytes.Buffer
 					for  i := 0 ; i < 2-lens ; i++ {
 						month_buf.WriteString("0")
 					}
 					month_buf.WriteString(_strMonth)
+
+					lens = len(_strDay)
 					var day_buf bytes.Buffer
 					for  i := 0 ; i < 2-lens ; i++ {
 						day_buf.WriteString("0")
