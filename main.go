@@ -449,7 +449,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					CURRENT_MILLIS := string(CURRENT_NANO)
 					stocknum := message.Text[1:]
 					var stockresult interface{}
-					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&_"+CURRENT_MILLIS
+					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&_"+CURRENT_MILLIS+""
 					log.Print(URL)
 					getJson(URL, &stockresult)
 					stockByte, _ := json.Marshal(stockresult)
