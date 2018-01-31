@@ -400,10 +400,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							var airJson []AIRINFO
 							var airresult interface{}
 							getJson("http://opendata2.epa.gov.tw/AQI.json", airresult)
-							err = json.NewDecoder(airresult).Decode(&airJson)
-							if err != nil {
-								log.Println("cannot decode JSON: %v", err)
-							}
+							airByte, _ := json.Marshal(airresult)
+							json.Unmarshal(airByte, &airJson)
+							//err = json.NewDecoder(airresult).Decode(&airJson)
+							//if err != nil {
+							//	log.Println("cannot decode JSON: %v", err)
+							//}
 							log.Println(airJson)
 							isFound := false
 							for _, airinfo := range airJson {
