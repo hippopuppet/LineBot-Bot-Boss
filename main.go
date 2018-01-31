@@ -442,10 +442,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
     
 				}// ==!
 				if string(message.Text[0]) == "P" {
-					CURRENT_MILLIS := time.Now().UnixNano()/1000000
+					CURRENT_MILLIS := string(time.Now().UnixNano()/1000000)
 					stocknum := message.Text[1:]
 					var stockresult interface{}
-					getJson("http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&_"+CURRENT_MILLIS, &stockresult)
+					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&_"+CURRENT_MILLIS
+					getJson(URL, &stockresult)
 					stockByte, _ := json.Marshal(stockresult)
 					log.Print("stockByte")
 					log.Print(string(stockByte))
