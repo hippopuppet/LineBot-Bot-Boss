@@ -508,7 +508,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					for  i := 0 ; i < 2-lens ; i++ {
 						day_buf.WriteString("0")
 					}
-					day_buf.WriteString(strconv.Itoa(_Day))
+					day_buf.WriteString(_strDay)
 
 					var date_buf bytes.Buffer
 					date_buf.WriteString(strconv.Itoa(_Year))
