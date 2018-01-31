@@ -400,7 +400,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						if len(result) > 1 {
 							var airJson []AIRINFO
 							var airresult interface{}
-							getJson("http://opendata2.epa.gov.tw/AQI.json", airresult)
+							getJson("http://opendata2.epa.gov.tw/AQI.json", &airresult)
+							log.Println("airresult...")
+							log.Println(airresult)
 							airByte, _ := json.Marshal(airresult)
 							json.Unmarshal(airByte, &airJson)
 							//err = json.NewDecoder(airresult).Decode(&airJson)
