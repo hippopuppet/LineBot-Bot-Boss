@@ -512,7 +512,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					var stockJson []STOCKINFO
 					var stockresult interface{}
 
-					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+string(date_buf)+"&_="+CURRENT_MILLIS
+					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
 					getJson(URL, &stockresult)
 					stockByte, _ := json.Marshal(stockresult)
 					log.Print("stockByte")
