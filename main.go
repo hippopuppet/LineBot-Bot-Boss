@@ -101,8 +101,8 @@ func toJson(p interface{}) string {
     return string(bytes)
 }
 
-func getAirJson(result *[]AIRINFO) error {
-	url := "http://opendata2.epa.gov.tw/AQI.json"
+func getJson(url string, result interface{}) error {
+	//url := "http://opendata2.epa.gov.tw/AQI.json"
 	resp, err := http.Get(url)
     if err != nil {
         return fmt.Errorf("cannot fetch URL %q: %v", url, err)
@@ -114,11 +114,11 @@ func getAirJson(result *[]AIRINFO) error {
     }
     // We could check the resulting content type
     // here if desired.
-    err = json.NewDecoder(resp.Body).Decode(result)
+    /*err = json.NewDecoder(resp.Body).Decode(result)
 
     if err != nil {
         return fmt.Errorf("cannot decode JSON: %v", err)
-    }
+    }*/
     return nil
 
    /*raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
@@ -398,7 +398,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if result[0] == "!PM" {
 						if len(result) > 1 {
 							var airJson []AIRINFO
-							getAirJson(&airJson)
+							var airresult interface{}
+							getJson("http://opendata2.epa.gov.tw/AQI.json", &airresult)
+							err = json.NewDecoder(airresult).Decode(airJson)
+							if err != nil {
+								log.Println("cannot decode JSON: %v", err)
+							}
 							log.Println(airJson)
 							isFound := false
 							for _, airinfo := range airJson {
@@ -434,7 +439,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
     
 				}// ==!
-				
+				if string(message.Text[0]) == "P" {
+					
+					
+				}// == P
 				
 			
 				
