@@ -431,10 +431,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString(bossinfo.Author)
 							list_buf.WriteString("\n")							
 						}
-     
-						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf.String())).Do(); err != nil {
-							log.Print(err)
+
+						for _, groupinfo := range dbResult[0].GroupInfo {
+							if groupinfo.Id == event.Source.GroupID {
+								if groupinfo.License == 1 {
+									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf.String())).Do(); err != nil {
+										log.Print(err)
+									}
+								}
+							}							
 						}
+						
 					}//!LIST
 					if result[0] == "!PM" {
 						if len(result) > 1 {
