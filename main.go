@@ -114,11 +114,11 @@ func getJson(url string, result interface{}) error {
     }
     // We could check the resulting content type
     // here if desired.
-    /*err = json.NewDecoder(resp.Body).Decode(result)
+    err = json.NewDecoder(resp.Body).Decode(result)
 
     if err != nil {
         return fmt.Errorf("cannot decode JSON: %v", err)
-    }*/
+    }
     return nil
 
    /*raw, err := ioutil.ReadFile("http://opendata.epa.gov.tw/ws/Data/REWIQA/?$orderby=SiteName&amp;$skip=0&amp;$top=1000&amp;format=json")
