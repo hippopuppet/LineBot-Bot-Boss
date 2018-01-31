@@ -70,9 +70,6 @@ type AIRINFO struct {
 	WindSpeed string `bson:"WindSpeed" json:"WindSpeed"`
 }
 
-type AIRINFO struct {
-	
-}
 
 func convertTimetoMinute(orgTime int) int {
 	H := orgTime/100
