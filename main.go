@@ -447,6 +447,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print("CURRENT_NANO")
 					log.Print(CURRENT_NANO)
 					CURRENT_MILLIS := string(CURRENT_NANO)
+					log.Print("CURRENT_MILLIS")
+					log.Print(CURRENT_MILLIS)
 					stocknum := message.Text[1:]
 					var stockresult interface{}
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&_"+CURRENT_MILLIS+""
