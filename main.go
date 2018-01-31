@@ -443,10 +443,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}// ==!
 				if string(message.Text[0]) == "P" {
 
-					CURRENT_NANO := time.Now().UnixNano()/1000000
+					CURRENT_NANO := time.Now().UnixNano()/int64(time.Millisecond)
 					log.Print("CURRENT_NANO")
 					log.Print(CURRENT_NANO)
-					CURRENT_MILLIS := string(CURRENT_NANO)
+					CURRENT_MILLIS := strconv.Itoa(CURRENT_NANO)
 					log.Print("CURRENT_MILLIS")
 					log.Print(CURRENT_MILLIS)
 					stocknum := message.Text[1:]
