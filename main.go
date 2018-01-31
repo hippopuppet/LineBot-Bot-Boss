@@ -484,9 +484,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if string(message.Text[0]) == "P" {
 					var local *time.Location
 					local, _ = time.LoadLocation("Asia/Taipei")
-					_Year := time.Now().In(local).Date()
-					log.Print("Date")
+					_Year,_Month,_Day := time.Now().In(local).Date()
+					log.Print("_Year")
 					log.Print(_Year)
+					log.Print("_Month")
+					log.Print(_Month)
+					log.Print("_Day")
+					log.Print(_Day)
 					/*
 					CURRENT_NOW := _NowTime
 					CURRENT_NANO := time.Now().UnixNano()/int64(time.Millisecond)
