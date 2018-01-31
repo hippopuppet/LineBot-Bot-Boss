@@ -483,7 +483,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}// ==!
 				if string(message.Text[0]) == "P" {
 					var local *time.Location
-					local, _ := time.LoadLocation("Asia/Taipei")
+					local, _ = time.LoadLocation("Asia/Taipei")
 					_Year := time.Now().In(local).Date()
 					log.Print("Date")
 					log.Print(_Year)
