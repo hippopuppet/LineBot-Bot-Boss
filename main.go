@@ -398,9 +398,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if result[0] == "!PM" {
 						if len(result) > 1 {
 							var airJson []AIRINFO
-							var airresult interface{}
-							getJson("http://opendata2.epa.gov.tw/AQI.json", airresult)
-							err = json.Marshal(airresult, &airJson)
+							var airresult map[string]interface{}
+							getJson("http://opendata2.epa.gov.tw/AQI.json", &airresult)
+							err = json.Unmarshal(airresult, &airJson)
 							if err != nil {
 								log.Println("cannot decode JSON: %v", err)
 							}
