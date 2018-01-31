@@ -48,6 +48,7 @@ type GROUPINFO struct {
     Id  string `bson:"id" json:"id"`
 	Type string `bson:"type" json:"type"`
 	Active int `bson:"active" json:"active"`
+	License int `bson:"license" json:"license"`
 }
 
 type AIRINFO struct {
@@ -217,7 +218,7 @@ func main() {
 					if JetLag == 5/* || JetLag == 7*/ {
 						
 						for _, groupinfo := range dbResult[0].GroupInfo {
-							if groupinfo.Active == 1 {
+							if groupinfo.Active == 1 && groupinfo.License == 1{
 								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +"將在"+bossinfo.Resurrection+"重生! Map: "+ bossinfo.Map)).Do(); err != nil {
 									log.Print(err)
 								}
