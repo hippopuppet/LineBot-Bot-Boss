@@ -336,67 +336,69 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							if err != nil {
 								log.Println(err)
 							}
-							isFound := false
-							for i, _ := range dbResult[0].BossInfo {
-								if result[1] == dbResult[0].BossInfo[i].KingOfName {										
-									dbResult[0].BossInfo[i].Die = result[2]
-									intNewDie, err := strconv.Atoi(result[2])
-									if err != nil {
-										log.Print(err)
-									}
-									intNewDieMinute := convertTimetoMinute(intNewDie)
-									intRefreshTick, err := strconv.Atoi(dbResult[0].BossInfo[i].RefreshTick)
-									if err != nil {
-										log.Print(err)
-									}
-									intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
-									strNewDieTime := strconv.Itoa(intNewDieTime)
-									lens := len(strNewDieTime)
-									var list_buf bytes.Buffer
-									for  i := 0 ; i < 4-lens ; i++ {
-										list_buf.WriteString("0")
-									}
-									list_buf.WriteString(strNewDieTime)		
-									dbResult[0].BossInfo[i].Resurrection = list_buf.String()
-									
-									var local *time.Location
-									local, ok := time.LoadLocation("Asia/Taipei")
-									log.Print(ok)
-									_NowTime := time.Now().In(local)
-									dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")
 
-									profile, err := bot.GetProfile(event.Source.UserID).Do();
-									if err != nil {
-										log.Println(err)
+							for _, groupinfo := range dbResult[0].GroupInfo {
+							if groupinfo.Id == event.Source.GroupID {
+								if groupinfo.License == 1 {
+										isFound := false
+										for i, _ := range dbResult[0].BossInfo {
+											if result[1] == dbResult[0].BossInfo[i].KingOfName {										
+												dbResult[0].BossInfo[i].Die = result[2]
+												intNewDie, err := strconv.Atoi(result[2])
+												if err != nil {
+													log.Print(err)
+												}
+												intNewDieMinute := convertTimetoMinute(intNewDie)
+												intRefreshTick, err := strconv.Atoi(dbResult[0].BossInfo[i].RefreshTick)
+												if err != nil {
+													log.Print(err)
+												}
+												intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
+												strNewDieTime := strconv.Itoa(intNewDieTime)
+												lens := len(strNewDieTime)
+												var list_buf bytes.Buffer
+												for  i := 0 ; i < 4-lens ; i++ {
+													list_buf.WriteString("0")
+												}
+												list_buf.WriteString(strNewDieTime)		
+												dbResult[0].BossInfo[i].Resurrection = list_buf.String()
+									
+												var local *time.Location
+												local, ok := time.LoadLocation("Asia/Taipei")
+												log.Print(ok)
+												_NowTime := time.Now().In(local)
+												dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")
+
+												profile, err := bot.GetProfile(event.Source.UserID).Do();
+												if err != nil {
+													log.Println(err)
+												}
+												dbResult[0].BossInfo[i].Author = profile.DisplayName
+												// Update
+												colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
+												change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate,"BOSSINFO.$.author":dbResult[0].BossInfo[i].Author}}
+												//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
+												err = c.Update(colQuerier, change)
+												if err != nil {
+													log.Println(err)
+												}
+												if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")).Do(); err != nil {
+													log.Print(err)
+												}
+												isFound = true
+												break
+											}
+										}
+								
+										if isFound == false {
+											if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("HAS NO BOSS:"+ result[1])).Do(); err != nil {
+												log.Print(err)
+											}									
+										}
 									}
-									dbResult[0].BossInfo[i].Author = profile.DisplayName
-									// Update
-									colQuerier := bson.M{"BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
-									change := bson.M{"$set": bson.M{"BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate,"BOSSINFO.$.author":dbResult[0].BossInfo[i].Author}}
-									//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
-									err = c.Update(colQuerier, change)
-									if err != nil {
-										log.Println(err)
-									}
-									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")).Do(); err != nil {
-										log.Print(err)
-									}
-									isFound = true
-									break
 								}
 							}
-								
-							if isFound == false {
-								if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("HAS NO BOSS:"+ result[1])).Do(); err != nil {
-									log.Print(err)
-								}									
-							}
-							/*JsonData, err := json.Marshal(dbResult)
-							if err != nil {
-								log.Print(err)
-							}
-							log.Println("Marshal result: ...")
-							log.Println(string(JsonData))*/
+							
 						}
 					}// ==!BOSS
 					if message.Text == "!LIST" {
