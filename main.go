@@ -502,8 +502,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					var date_buf bytes.Buffer
 					date_buf.WriteString(strconv.Itoa(_Year))
-					date_buf.WriteString(month_buf)
-					date_buf.WriteString(day_buf)
+					date_buf.WriteString(month_buf.String())
+					date_buf.WriteString(day_buf.String())
 					
 					CURRENT_NANO := time.Now().In(local).UnixNano()/int64(time.Millisecond)
 					CURRENT_MILLIS := strconv.FormatInt(CURRENT_NANO, 10)
