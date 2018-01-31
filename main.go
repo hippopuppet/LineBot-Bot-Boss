@@ -442,7 +442,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
     
 				}// ==!
 				if string(message.Text[0]) == "P" {
-					stocknum := *message.Text++
+					
+					stocknum := message.Text[1:]
 					log.Println("stocknum: %v", stocknum)
 					//var airresult interface{}
 					//getJson("http://opendata2.epa.gov.tw/AQI.json", &airresult)
