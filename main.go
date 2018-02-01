@@ -525,8 +525,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					//u, err := url.Parse("http://mis.twse.com.tw/stock/fibest.jsp?stock=1101")
 					
-					req, err := http.NewRequest("GET", "http://mis.twse.com.tw", nil)
-					cookie := req.Cookie{Name: "JSESSIONID", Value: "748555A2619B2CB7A12250B0C5B42267", Path: "http://mis.twse.com.tw/", MaxAge: 86400}
+					client := &http.Client{
+						CheckRedirect: redirectPolicyFunc,
+					}
+
+					resp, err := client.Get("http://mis.twse.com.tw/")
+					cookie := resp.Cookie{Name: "JSESSIONID", Value: "748555A2619B2CB7A12250B0C5B42267", Path: "http://mis.twse.com.tw/", MaxAge: 86400}
 					/*http.SetCookie(w, &cookie)
 					req, err := http.NewRequest("GET", "http://mis.twse.com.tw", nil)
 					if err != nil {
