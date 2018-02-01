@@ -20,7 +20,6 @@ import (
 	"time"
 	"strconv"
 	"encoding/json"
-	"io/ioutil"
 	"strings"
 	"bytes"
 
