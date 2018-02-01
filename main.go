@@ -20,7 +20,7 @@ import (
 	"time"
 	"strconv"
 	"encoding/json"
-	
+	"io/ioutil"
 	"strings"
 	"bytes"
 
@@ -530,6 +530,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						// handle error
 					}
 					defer resp.Body.Close()
+					body, err := ioutil.ReadAll(resp.Body)
+					if err != nil {
+						// handle error
+					}
+					log.Print(body)
+
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
 					log.Print("URL")
 					log.Print(URL)
