@@ -530,7 +530,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Println(err)
 					}
 					defer resp.Body.Close()
-					_, err := ioutil.ReadAll(resp.Body)
+					_, err = ioutil.ReadAll(resp.Body)
 					if err != nil {
 						log.Println(err)
 					}
