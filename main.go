@@ -525,7 +525,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					var stockJson []STOCKINFO
 					var stockresult interface{}
 
-					url.Parse("http://mis.twse.com.tw/stock/fibest.jsp?stock=1101").Query()
+					err = url.Parse("http://mis.twse.com.tw/stock/fibest.jsp?stock=1101").Query()
 
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
 					log.Print("URL")
