@@ -525,16 +525,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					var stockresult interface{}
 
 					//u, err := url.Parse("http://mis.twse.com.tw/stock/fibest.jsp?stock=1101")
-					resp, err := http.Get("http://mis.twse.com.tw/")
+					resp, err := http.Get("http://mis.twse.com.tw/stock/fibest.jsp?stock=1101")
 					if err != nil {
-						// handle error
+						log.Println(err)
 					}
 					defer resp.Body.Close()
 					body, err := ioutil.ReadAll(resp.Body)
 					if err != nil {
-						// handle error
+						log.Println(err)
 					}
-					log.Print(body)
+				
 
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
 					log.Print("URL")
