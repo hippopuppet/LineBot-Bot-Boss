@@ -529,9 +529,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					//cookie := req.Cookie{Name: "JSESSIONID", Value: "748555A2619B2CB7A12250B0C5B42267", Path: "http://mis.twse.com.tw/", MaxAge: 86400}
 					/*http.SetCookie(w, &cookie)
 					req, err := http.NewRequest("GET", "http://mis.twse.com.tw", nil)
-					if err != nil {
+					*/if err != nil {
 						log.Println(err)
-					}*/
+					}
 					log.Println(req)
 
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
