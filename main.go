@@ -531,10 +531,50 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(string(stockByte))
 					
 				}// == P
-				
+				/*
+				if string(message.Text[0]) != "!" && string(message.Text[0]) != "P"{
+					//[CONNECT DB]
+					session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+					if err != nil {
+						panic(err)
+					}
+					defer session.Close()
+					// Optional. Switch the session to a monotonic behavior.
+					session.SetMode(mgo.Monotonic, true)
+					c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+
+					// Find
+					var dbResult []JSONDATA
+					err = c.Find(nil).All(&dbResult)
+					if err != nil {
+						log.Println(err)
+					}
+					profile, err := bot.GetGroupMemberProfile( event.Source.GroupID, event.Source.UserID).Do();
+					if err != nil {
+						log.Println(err)
+					}
+					dbResult[0].BossInfo[i].Author = profile.DisplayName
+
+					// Upsert
+					colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
+					upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0, "GROUPINFO.$.license":0}}
+					//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
+					info, err := c.Upsert(colQuerier, upsertData)
+					if err != nil {
+						log.Println(err)
+						//if err == mgp.findAndModifyFailed {
+							upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "group", "active":0, "license":0}}}
+							info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
+							if err != nil {
+								log.Println(err)
+							}
+							log.Println(info)
+						//}
+					}
+				}*/
 			
 				
-			}
+			}//evens == message
 			
 		}
 
