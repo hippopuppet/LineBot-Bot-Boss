@@ -529,7 +529,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						log.Fatal(err)
 					}
-					_ := u.Query()
+					_ = u.Query()
 
 					URL := "http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_"+stocknum+".tw&json=1&delay=0&d="+date_buf.String()+"&_="+CURRENT_MILLIS
 					log.Print("URL")
