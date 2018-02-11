@@ -41,6 +41,7 @@ type BOSSINFO struct {
 	Map string `bson:"map" json:"map"`
     UpdateDate string `bson:"updatedate" json:"updatedate"`
 	Author string `bson:"author" json:"author"`
+	Category string `bson:"category" json:"category"`
 }
 
 type GROUPINFO struct {
@@ -48,6 +49,7 @@ type GROUPINFO struct {
 	Type string `bson:"type" json:"type"`
 	Active int `bson:"active" json:"active"`
 	License int `bson:"license" json:"license"`
+	CreateTime string `bson:"createtime" json:"createtime"`
 }
 
 type AIRINFO struct {
@@ -594,6 +596,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeJoin {
+			var local *time.Location
+			local, ok := time.LoadLocation("Asia/Taipei")
+			_NowTime := time.Now().In(local)
+			_NowTimeStr := _NowTime.Format("2006-01-02 15:04:05")
+
 			//[CONNECT DB]
 			session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
 			if err != nil {
@@ -612,13 +619,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			// Upsert
 			colQuerier := bson.M{"GROUPINFO.id" : event.Source.GroupID}
-			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0, "GROUPINFO.$.license":0}}
+			upsertData := bson.M{"$set": bson.M{"GROUPINFO.$.id": event.Source.GroupID, "GROUPINFO.$.type": "group", "GROUPINFO.$.active":0, "GROUPINFO.$.license":0, "GROUPINFO.$.createtime":_NowTimeStr}}
 			//upsertData := bson.M{"$set": bson.M{"GROUPINFO": bson.M{ "id": event.Source.GroupID, "type": "user", "active":0}}}
 			info, err := c.Upsert(colQuerier, upsertData)
 			if err != nil {
 				log.Println(err)
 				//if err == mgp.findAndModifyFailed {
-					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "group", "active":0, "license":0}}}
+					upsertData := bson.M{"$push": bson.M{"GROUPINFO": bson.M{"id": event.Source.GroupID, "type": "group", "active":0, "license":0 , "createtime": _NowTimeStr }}}
 					info, err := c.UpsertId(bson.ObjectIdHex("5a69aa488d0d213fd88abd95"), upsertData)
 					if err != nil {
 						log.Println(err)
