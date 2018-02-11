@@ -30,7 +30,7 @@ import (
 
 type JSONDATA struct {
     BossInfo []BOSSINFO `bson:"BOSSINFO" json:"BOSSINFO"`
-	_BossInfo []BOSSINFO `bson:"BOSSINFO_" json:"BOSSINFO_"`
+	_BossInfo []BOSSINFO `bson:"BOSSINFOO" json:"BOSSINFOO"`
 	GroupInfo []GROUPINFO `bson:"GROUPINFO" json:"GROUPINFO"`
 }
 
