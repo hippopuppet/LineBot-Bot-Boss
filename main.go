@@ -228,7 +228,7 @@ func main() {
 						}
 					}
 				}	
-				for _, bossinfo := range dbResult[0]._BossInfo {
+				/*for _, bossinfo := range dbResult[0]._BossInfo {
 					bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
 					if err != nil {
 						log.Print(err)
@@ -242,7 +242,7 @@ func main() {
 						}
 						
 					}
-				}
+				}*/
 					
 			case <- doneChan:
 				log.Println("Done")
