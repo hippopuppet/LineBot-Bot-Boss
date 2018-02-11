@@ -597,7 +597,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 		if event.Type == linebot.EventTypeJoin {
 			var local *time.Location
-			local, _ := time.LoadLocation("Asia/Taipei")
+			local, _ = time.LoadLocation("Asia/Taipei")
 			_NowTime := time.Now().In(local)
 			_NowTimeStr := _NowTime.Format("2006-01-02 15:04:05")
 
