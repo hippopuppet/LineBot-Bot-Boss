@@ -30,6 +30,7 @@ import (
 
 type JSONDATA struct {
     BossInfo []BOSSINFO `bson:"BOSSINFO" json:"BOSSINFO"`
+	_BossInfo []BOSSINFO `bson:"_BOSSINFO" json:"_BOSSINFO"`
 	GroupInfo []GROUPINFO `bson:"GROUPINFO" json:"GROUPINFO"`
 }
 
@@ -225,17 +226,23 @@ func main() {
 								}
 							}
 						}
-					}//if JetLag == 0 || JetLag == 7 
-					/*if JetLag == 10 {
-						for _, groupinfo := range dbResult[0].GroupInfo {
-							if groupinfo.Active == 1 {
-								if _, err := bot.PushMessage(groupinfo.Id, linebot.NewTextMessage("BOSS : "+bossinfo.KingOfName +" 已經重生了!!! Map: "+ bossinfo.Map)).Do(); err != nil {
-									log.Print(err)
-								}
-							}
-						}
-					}//if JetLag == 10 */
+					}
 				}	
+				for _, bossinfo := range dbResult[0]._BossInfo {
+					bossinfo_Resurrection, err := strconv.Atoi(bossinfo.Resurrection)
+					if err != nil {
+						log.Print(err)
+					}
+					ResurrectionA := convertTimetoMinute(bossinfo_Resurrection)
+					JetLag := NOWTIME - ResurrectionA
+					if JetLag == 5 {
+						
+						if _, err := bot.PushMessage("C7e98ffa1fcb2d0a399cd27aca6bffca0", linebot.NewTextMessage("[革]BOSS : "+bossinfo.KingOfName +"將在"+bossinfo.Resurrection+"重生! Map: "+ bossinfo.Map)).Do(); err != nil {
+							log.Print(err)
+						}
+						
+					}
+				}
 					
 			case <- doneChan:
 				log.Println("Done")
@@ -492,6 +499,143 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
     
 				}// ==!
+
+				if string(message.Text[0]) == "#" {
+					result := strings.Split(message.Text," ")
+					
+					if result[0] == "#BOSS" {
+						if result[2] != "" {
+							log.Println("CONNECT DB....")
+							//[CONNECT DB]
+							session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+							if err != nil {
+								panic(err)
+							}
+							defer session.Close()
+							// Optional. Switch the session to a monotonic behavior.
+							session.SetMode(mgo.Monotonic, true)
+
+							c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+							log.Println("find data...")
+							var dbResult []JSONDATA
+							err = c.Find(nil).All(&dbResult)
+							if err != nil {
+								log.Println(err)
+							}
+
+							for _, groupinfo := range dbResult[0].GroupInfo {
+							if groupinfo.Id == event.Source.GroupID {
+								if groupinfo.License == 1 {
+										isFound := false
+										for i, _ := range dbResult[0].BossInfo {
+											if result[1] == dbResult[0].BossInfo[i].KingOfName {										
+												dbResult[0].BossInfo[i].Die = result[2]
+												intNewDie, err := strconv.Atoi(result[2])
+												if err != nil {
+													log.Print(err)
+												}
+												intNewDieMinute := convertTimetoMinute(intNewDie)
+												intRefreshTick, err := strconv.Atoi(dbResult[0].BossInfo[i].RefreshTick)
+												if err != nil {
+													log.Print(err)
+												}
+												intNewDieTime := convertMinutetoTime(intNewDieMinute + intRefreshTick)
+												strNewDieTime := strconv.Itoa(intNewDieTime)
+												lens := len(strNewDieTime)
+												var list_buf bytes.Buffer
+												for  i := 0 ; i < 4-lens ; i++ {
+													list_buf.WriteString("0")
+												}
+												list_buf.WriteString(strNewDieTime)		
+												dbResult[0].BossInfo[i].Resurrection = list_buf.String()
+									
+												var local *time.Location
+												local, ok := time.LoadLocation("Asia/Taipei")
+												log.Print(ok)
+												_NowTime := time.Now().In(local)
+												dbResult[0].BossInfo[i].UpdateDate = _NowTime.Format("2006-01-02 15:04:05")
+
+												profile, err := bot.GetProfile(event.Source.UserID).Do();
+												if err != nil {
+													log.Println(err)
+												}
+												dbResult[0].BossInfo[i].Author = profile.DisplayName
+												// Update
+												colQuerier := bson.M{"_BOSSINFO.kingofname": dbResult[0].BossInfo[i].KingOfName}
+												change := bson.M{"$set": bson.M{"_BOSSINFO.$.die": dbResult[0].BossInfo[i].Die, "_BOSSINFO.$.resurrection": dbResult[0].BossInfo[i].Resurrection,"_BOSSINFO.$.updatedate": dbResult[0].BossInfo[i].UpdateDate,"_BOSSINFO.$.author":dbResult[0].BossInfo[i].Author}}
+												//id := bson.ObjectIdHex("5a69a0718d0d213fd88abd92")
+												err = c.Update(colQuerier, change)
+												if err != nil {
+													log.Println(err)
+												}
+												if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("UPDATE BOSS:"+dbResult[0].BossInfo[i].KingOfName+" INFO SUCCESS.")).Do(); err != nil {
+													log.Print(err)
+												}
+												isFound = true
+												break
+											}
+										}
+								
+										if isFound == false {
+											if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("HAS NO BOSS:"+ result[1])).Do(); err != nil {
+												log.Print(err)
+											}									
+										}
+									}
+								}
+							}
+							
+						}
+					}// ==#BOSS
+					if message.Text == "#LIST" {
+						//[CONNECT DB]
+						session, err := mgo.Dial("mongodb://heroku_xzzlp7s1:heroku_xzzlp7s1@ds111598.mlab.com:11598/heroku_xzzlp7s1")
+						if err != nil {
+							panic(err)
+						}
+						defer session.Close()
+
+						// Optional. Switch the session to a monotonic behavior.
+						session.SetMode(mgo.Monotonic, true)
+
+						c := session.DB("heroku_xzzlp7s1").C("bossinfo")
+						var dbResult []JSONDATA
+						err = c.Find(nil).All(&dbResult)
+						if err != nil {
+							log.Fatal(err)
+						}
+						var list_buf bytes.Buffer
+						for i, bossinfo := range dbResult[0].BossInfo {
+							list_buf.WriteString(strconv.Itoa(i+1))
+							list_buf.WriteString(". ")
+							list_buf.WriteString(bossinfo.KingOfName)
+							list_buf.WriteString(" : ")
+							list_buf.WriteString(bossinfo.Resurrection)
+							list_buf.WriteString("   Map: ")
+							list_buf.WriteString(bossinfo.Map)
+							list_buf.WriteString("   Last Upate: ")
+							list_buf.WriteString(bossinfo.UpdateDate)
+							list_buf.WriteString(" from: ")
+							list_buf.WriteString(bossinfo.Author)
+							list_buf.WriteString("\n")							
+						}
+
+						for _, groupinfo := range dbResult[0].GroupInfo {
+							if groupinfo.Id == event.Source.GroupID {
+								if groupinfo.License == 1 {
+									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf.String())).Do(); err != nil {
+										log.Print(err)
+									}
+								}
+							}							
+						}
+						
+					}//#LIST
+					
+
+    
+				}// ==#
+
 				if string(message.Text[0]) == "P" {
 					var local *time.Location
 					local, _ = time.LoadLocation("Asia/Taipei")
@@ -548,6 +692,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Print(stockJson)
 					
 				}// == P
+				
 				/*
 				if string(message.Text[0]) != "!" && string(message.Text[0]) != "P"{
 					//[CONNECT DB]
