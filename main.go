@@ -499,7 +499,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
     
 				}// ==!
-				//if event.Source.GroupID == "C7e98ffa1fcb2d0a399cd27aca6bffca0" {
+				if event.Source.GroupID == "C7e98ffa1fcb2d0a399cd27aca6bffca0" {
 					if string(message.Text[0]) == "#" {
 						result := strings.Split(message.Text," ")
 					
@@ -645,7 +645,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
     
 					}// ==#
-				//}
+				}
 
 				if string(message.Text[0]) == "P" {
 					var local *time.Location
