@@ -523,8 +523,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									log.Println(err)
 								}
 
-								for _, groupinfo := range dbResult[0].GroupInfo {
-									if groupinfo.Id == event.Source.GroupID {
+								//for _, groupinfo := range dbResult[0].GroupInfo {
+									//if groupinfo.Id == event.Source.GroupID {
 										//if groupinfo.License == 1 {
 											isFound := false
 											for i, _ := range dbResult[0].BossInfo_ {
@@ -582,8 +582,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 												}									
 											}
 										//}
-									}
-								}
+									//}
+								//}
 							
 							}
 						}// ==#BOSS
