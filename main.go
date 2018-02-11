@@ -605,7 +605,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							log.Fatal(err)
 						}
 						var list_buf bytes.Buffer
-						for i, bossinfo := range dbResult[0].BossInfo {
+						list_buf.WriteString("[革命]")
+						list_buf.WriteString("\n")
+						for i, bossinfo := range dbResult[0]._BossInfo {
 							list_buf.WriteString(strconv.Itoa(i+1))
 							list_buf.WriteString(". ")
 							list_buf.WriteString(bossinfo.KingOfName)
@@ -620,7 +622,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							list_buf.WriteString("\n")							
 						}
 
-						for _, groupinfo := range dbResult[0].GroupInfo {
+						/*for _, groupinfo := range dbResult[0].GroupInfo {
 							if groupinfo.Id == event.Source.GroupID {
 								if groupinfo.License == 1 {
 									if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(list_buf.String())).Do(); err != nil {
@@ -628,6 +630,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 									}
 								}
 							}							
+						}*/
+						if _, err := bot.PushMessage("C7e98ffa1fcb2d0a399cd27aca6bffca0", linebot.NewTextMessage(list_buf.String())).Do(); err != nil {
+							log.Print(err)
 						}
 						
 					}//#LIST
