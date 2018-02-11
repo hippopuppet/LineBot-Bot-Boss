@@ -237,7 +237,7 @@ func main() {
 					JetLag := NOWTIME - ResurrectionA
 					if JetLag == 5 {
 						
-						if _, err := bot.PushMessage("C7e98ffa1fcb2d0a399cd27aca6bffca0", linebot.NewTextMessage("[革]BOSS : "+bossinfo.KingOfName +"將在"+bossinfo.Resurrection+"重生! Map: "+ bossinfo.Map)).Do(); err != nil {
+						if _, err := bot.PushMessage("C7e98ffa1fcb2d0a399cd27aca6bffca0", linebot.NewTextMessage("[革命]BOSS : "+bossinfo.KingOfName +"將在"+bossinfo.Resurrection+"重生! Map: "+ bossinfo.Map)).Do(); err != nil {
 							log.Print(err)
 						}
 						
