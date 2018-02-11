@@ -609,7 +609,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							var list_buf bytes.Buffer
 							list_buf.WriteString("[革命]")
 							list_buf.WriteString("\n")
-							for i, bossinfo := range dbResult[0].BossInfo {
+							for i, bossinfo := range dbResult[0].BossInfo_ {
 								list_buf.WriteString(strconv.Itoa(i+1))
 								list_buf.WriteString(". ")
 								list_buf.WriteString(bossinfo.KingOfName)
