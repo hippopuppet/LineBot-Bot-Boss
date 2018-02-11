@@ -604,6 +604,8 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 							if err != nil {
 								log.Fatal(err)
 							}
+							log.Print(dbResult)
+							log.Print(dbResult[0]._BossInfo)
 							var list_buf bytes.Buffer
 							list_buf.WriteString("[革命]")
 							list_buf.WriteString("\n")
@@ -621,7 +623,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 								list_buf.WriteString(bossinfo.Author)
 								list_buf.WriteString("\n")							
 							}
-
+							
 							/*for _, groupinfo := range dbResult[0].GroupInfo {
 								if groupinfo.Id == event.Source.GroupID {
 									if groupinfo.License == 1 {
